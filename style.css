@@ -3,7 +3,7 @@ body{
     height: 100vh;
     margin: 0;
     background-image: url('Map.svg');
-    background-size: 100vw;
+    background-size: 75vw;
     background-repeat: no-repeat;
     background-position: center;
 }
