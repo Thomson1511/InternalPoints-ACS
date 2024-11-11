@@ -7,40 +7,63 @@ let PointsList = [/*"gasna", "begla", "pesat", "abeti", "sopro", "arsin", "stein
      "ilhak", "dodar", "babox", "erguz", "abony", "zurfa", "norah", "nipur", "lahor"*/ "tekno", "pesat", "natex"];
 
 
-const zoomableElement = document.getElementById('zoomable');
-let isZoomed = false;
-
-// Prevent default context menu on right click
-//document.addEventListener('contextmenu', (e) => e.preventDefault());
-
-document.addEventListener('mousedown', (e) => {
-    if (e.button === 1) { // Right-click
-        if (!isZoomed) {
-            zoomIn(e.clientX, e.clientY);
-        } else {
-            zoomOut();
-        }
-    }
-    else if (e.button === 2) { // Fourth button (usually back button)
-        alert(`Position - Top: ${e.clientY - 5}px, Left: ${e.clientX - 5}px`);
-    }
-});
-
-function zoomIn(x, y) {
-    const rect = zoomableElement.getBoundingClientRect();
-    const offsetX = x - rect.left;
-    const offsetY = y - rect.top;
-    const scale = 2.5; // 150% nagyítás
-
-    zoomableElement.style.transformOrigin = `${offsetX}px ${offsetY}px`;
-    zoomableElement.style.transform = `scale(${scale})`;
-    isZoomed = true;
-}
-
-function zoomOut() {
-    zoomableElement.style.transform = 'scale(1)';
-    isZoomed = false;
-}
+     const zoomableElement = document.getElementById('zoomable');
+     let scale = 1, isDragging = false, startX, startY, originX = 0, originY = 0;
+     
+     // For panning
+     zoomableElement.addEventListener('pointerdown', (e) => {
+         isDragging = true;
+         startX = e.clientX - originX;
+         startY = e.clientY - originY;
+         zoomableElement.setPointerCapture(e.pointerId); // Capture pointer for smooth dragging
+     });
+     
+     document.addEventListener('pointermove', (e) => {
+         if (!isDragging) return;
+         originX = e.clientX - startX;
+         originY = e.clientY - startY;
+         zoomableElement.style.transform = `translate(${originX}px, ${originY}px) scale(${scale})`;
+     });
+     
+     document.addEventListener('pointerup', (e) => {
+         isDragging = false;
+         zoomableElement.releasePointerCapture(e.pointerId); // Release pointer capture
+     });
+     
+     // For zooming on mouse wheel
+     zoomableElement.addEventListener('wheel', (e) => {
+         e.preventDefault();
+         scale += e.deltaY * -0.003; // Adjust the zoom sensitivity
+         scale = Math.min(Math.max(1, scale), 2.5); // Limit zoom level between 0.5x and 2.5x
+         zoomableElement.style.transform = `translate(${originX}px, ${originY}px) scale(${scale})`;
+     }, { passive: false });
+     
+     // Optional middle-click zoom function
+     document.addEventListener('mousedown', (e) => {
+         if (e.button === 1) { // Middle mouse button click
+             if (scale === 1) {
+                 zoomIn(e.clientX, e.clientY);
+             } else {
+                 zoomOut();
+             }
+         }
+     });
+     
+     function zoomIn(x, y) {
+         const rect = zoomableElement.getBoundingClientRect();
+         const offsetX = x - rect.left;
+         const offsetY = y - rect.top;
+         scale = 2.5; // Zoom scale
+         zoomableElement.style.transformOrigin = `${offsetX}px ${offsetY}px`;
+         zoomableElement.style.transform = `translate(${originX}px, ${originY}px) scale(${scale})`;
+     }
+     
+     function zoomOut() {
+         scale = 1;
+         zoomableElement.style.transformOrigin = 'center center';
+         zoomableElement.style.transform = `translate(${originX}px, ${originY}px) scale(${scale})`;
+     }
+     
 
 let currentPointIndex = 0;
 let shuffledPointList = [];
