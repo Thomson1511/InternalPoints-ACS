@@ -47,7 +47,13 @@ let PointsList = [/*"gasna", "begla", "pesat", "abeti", "sopro", "arsin", "stein
                  zoomOut();
              }
          }
+         else if (e.button === 2) { // Right-click or back button
+            const posiCont = document.getElementById("posi");
+            posiCont.textContent = `Position - Top: ${e.clientY - 5}px, Left: ${e.clientX - 5}px`;
+            //alert(`Position - Top: ${e.clientY - 5}px, Left: ${e.clientX - 5}px`);
+        }
      });
+     
      
      function zoomIn(x, y) {
          const rect = zoomableElement.getBoundingClientRect();
