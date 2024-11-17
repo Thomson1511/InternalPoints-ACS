@@ -53,29 +53,32 @@ document.addEventListener("keydown", (e) => {
 
 // Pontok hozzáadása a térképhez
 markerPositions.forEach(({ id, x, y }) => {
-    const marker = document.createElement("div");
-    marker.id = id;
-    marker.classList.add("marker-button");
-    marker.style.left = `${x}px`;
-    marker.style.top = `${y}px`;
-    mapContainer.appendChild(marker);
-  
-    // OnClick esemény hozzáadása
-    marker.addEventListener("click", () => {
-      const clickedId = marker.id;
-      console.log(clickedId);
-      const correctId = markerPositions[currentQuestionIndex].id;
-  
-      if (clickedId === correctId) {
-        alert("Helyes!");
-        askNextQuestion();
-      } else {
-        alert("Helytelen!");
-      }
-    });
-  });
+  const marker = document.createElement("div");
+  marker.id = id;
+  marker.classList.add("marker-button");
+  marker.style.left = `${x}px`;
+  marker.style.top = `${y}px`;
+  marker.style.width = `${20 * scale}px`; // Marker méretének beállítása a zoom alapján
+  marker.style.height = `${20 * scale}px`; // Marker méretének beállítása a zoom alapján
+  mapContainer.appendChild(marker);
 
-// Pontok pozíciójának frissítése
+  // OnClick esemény hozzáadása
+  marker.addEventListener("click", () => {
+    const clickedId = marker.id;
+    console.log(clickedId);
+    const correctId = markerPositions[currentQuestionIndex].id;
+
+    if (clickedId === correctId) {
+      alert("Helyes!");
+      askNextQuestion();
+    } else {
+      alert("Helytelen!");
+    }
+  });
+});
+
+
+// Pontok pozíciójának és méretének frissítése
 function updateMarkerPositions() {
   markerPositions.forEach(({ id, x, y }) => {
     const marker = document.getElementById(id);
@@ -83,8 +86,11 @@ function updateMarkerPositions() {
     const scaledY = y * scale + translateY;
     marker.style.left = `${scaledX}px`;
     marker.style.top = `${scaledY}px`;
+    marker.style.width = `${20 * scale}px`; // Marker méretének frissítése
+    marker.style.height = `${20 * scale}px`; // Marker méretének frissítése
   });
 }
+
 
 // Térkép átalakításának frissítése
 function updateTransform() {
@@ -168,9 +174,9 @@ mapContainer.addEventListener("wheel", (e) => {
   const oldScale = scale;
 
   if (e.deltaY < 0) {
-    scale *= scaleFactor;
+    scale *= scaleFactor; // Zoom in
   } else {
-    scale /= scaleFactor;
+    scale /= scaleFactor; // Zoom out
   }
 
   const rect = mapContainer.getBoundingClientRect();
@@ -181,7 +187,9 @@ mapContainer.addEventListener("wheel", (e) => {
   translateY -= mouseY / oldScale - mouseY / scale;
 
   updateTransform();
+  updateMarkerPositions(); // Markerek frissítése a zoom után
 });
+
 
 //Zoomolás telefonon
 let lastDistance = 0;  // Az előző távolság két ujj között
