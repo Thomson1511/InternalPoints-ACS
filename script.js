@@ -185,15 +185,23 @@ mapContainer.addEventListener("wheel", (e) => {
 
 //Zoomolás telefonon
 let lastDistance = 0;  // Az előző távolság két ujj között
+let lastTouchCenter = { x: 0, y: 0 }; // Két ujj középpontja
 
 mapContainer.addEventListener("touchstart", (e) => {
   if (e.touches.length === 2) {
-    // Ha két ujj van az érintőképernyőn, tároljuk az első távolságot
+    // Két ujj esetén tároljuk az első távolságot és a középpontot
     const x1 = e.touches[0].clientX;
     const y1 = e.touches[0].clientY;
     const x2 = e.touches[1].clientX;
     const y2 = e.touches[1].clientY;
+
     lastDistance = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2); // Két ujj távolsága
+
+    // Két ujj középpontja
+    lastTouchCenter = {
+      x: (x1 + x2) / 2,
+      y: (y1 + y2) / 2
+    };
   }
 });
 
@@ -208,6 +216,10 @@ mapContainer.addEventListener("touchmove", (e) => {
     if (lastDistance) {
       const scaleFactor = 0.05; // Az újrarendelési sebesség (finomítható)
 
+      // Kiszámoljuk a zoom középpontját (két ujj középpontja)
+      const centerX = (x1 + x2) / 2;
+      const centerY = (y1 + y2) / 2;
+
       // Ha a két ujj közötti távolság nőtt (zoom in), akkor növeljük a skálát
       if (currentDistance > lastDistance) {
         scale *= (1 + scaleFactor);
@@ -215,7 +227,18 @@ mapContainer.addEventListener("touchmove", (e) => {
         scale /= (1 + scaleFactor);
       }
 
+      // Frissítjük a középpontot
+      lastTouchCenter = { x: centerX, y: centerY };
       lastDistance = currentDistance; // Frissítjük az előző távolságot
+
+      // Kiszámoljuk az elmozdulást, hogy a zoom középpontja az új középpontra kerüljön
+      const rect = mapContainer.getBoundingClientRect();
+      const offsetX = centerX - rect.left;
+      const offsetY = centerY - rect.top;
+
+      translateX -= offsetX / scale * (scale - 1);
+      translateY -= offsetY / scale * (scale - 1);
+
       updateTransform(); // Alkalmazzuk a változtatásokat
     }
   }
@@ -227,7 +250,7 @@ mapContainer.addEventListener("touchend", (e) => {
   }
 });
 
-let version = 2;
+
 
 // Indítás
 askNextQuestion();
