@@ -18,6 +18,11 @@ let isPanning = false;
 let startX, startY;
 let currentQuestionIndex = -1;
 
+
+
+
+//Koordináták szerzése
+
 let mouseX, mouseY;  // Az egér koordinátái
 
 // Egér mozgatás esemény
@@ -41,7 +46,10 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
-  
+//Koordináták szerzésének vége
+
+
+
 
 // Pontok hozzáadása a térképhez
 markerPositions.forEach(({ id, x, y }) => {
@@ -174,6 +182,52 @@ mapContainer.addEventListener("wheel", (e) => {
 
   updateTransform();
 });
+
+//Zoomolás telefonon
+let lastDistance = 0;  // Az előző távolság két ujj között
+
+mapContainer.addEventListener("touchstart", (e) => {
+  if (e.touches.length === 2) {
+    // Ha két ujj van az érintőképernyőn, tároljuk az első távolságot
+    const x1 = e.touches[0].clientX;
+    const y1 = e.touches[0].clientY;
+    const x2 = e.touches[1].clientX;
+    const y2 = e.touches[1].clientY;
+    lastDistance = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2); // Két ujj távolsága
+  }
+});
+
+mapContainer.addEventListener("touchmove", (e) => {
+  if (e.touches.length === 2) {
+    const x1 = e.touches[0].clientX;
+    const y1 = e.touches[0].clientY;
+    const x2 = e.touches[1].clientX;
+    const y2 = e.touches[1].clientY;
+    const currentDistance = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2); // Két ujj aktuális távolsága
+
+    if (lastDistance) {
+      const scaleFactor = 0.05; // Az újrarendelési sebesség (finomítható)
+
+      // Ha a két ujj közötti távolság nőtt (zoom in), akkor növeljük a skálát
+      if (currentDistance > lastDistance) {
+        scale *= (1 + scaleFactor);
+      } else if (currentDistance < lastDistance) {  // Ha csökkent (zoom out), akkor csökkentjük a skálát
+        scale /= (1 + scaleFactor);
+      }
+
+      lastDistance = currentDistance; // Frissítjük az előző távolságot
+      updateTransform(); // Alkalmazzuk a változtatásokat
+    }
+  }
+});
+
+mapContainer.addEventListener("touchend", (e) => {
+  if (e.touches.length < 2) {
+    lastDistance = 0; // Töröljük a távolságot, ha már nincs két ujj
+  }
+});
+
+let version = 2;
 
 // Indítás
 askNextQuestion();
