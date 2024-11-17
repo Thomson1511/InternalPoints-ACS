@@ -7,16 +7,41 @@ let translateX = 0;
 let translateY = 0;
 
 const markerPositions = [
-  { id: "marker1", x: 500, y: 300 },
-  { id: "marker2", x: 800, y: 400 },
-  { id: "marker3", x: 300, y: 600 },
-  { id: "marker4", x: 1000, y: 200 },
-  { id: "marker5", x: 1200, y: 700 },
+  { id: "natex", x: 374, y: 400 },
+  { id: "tekno", x: 351, y: 444 },
+  { id: "kuvex", x: 360, y: 342 },
+  { id: "vamog", x: 414, y: 387 },
+  { id: "xomba", x: 512, y: 401 },
 ];
 
 let isPanning = false;
 let startX, startY;
 let currentQuestionIndex = -1;
+
+let mouseX, mouseY;  // Az egér koordinátái
+
+// Egér mozgatás esemény
+mapContainer.addEventListener("mousemove", (e) => {
+  // Az egér pozíciójának frissítése a térképhez igazítva
+  const rect = mapContainer.getBoundingClientRect();
+  mouseX = (e.clientX - rect.left - translateX) / scale;
+  mouseY = (e.clientY - rect.top - translateY) / scale;
+});
+
+// Koordináták másolása a vágólapra space lenyomására
+document.addEventListener("keydown", (e) => {
+  if (e.key === " ") {  // Ha a space billentyűt lenyomják
+    const markerData = `{ id: "marker5", x: ${mouseX}, y: ${mouseY} }`;  // Formázott szöveg
+    navigator.clipboard.writeText(markerData).then(() => {
+      alert("Koordináták másolva a vágólapra!");
+    }).catch(err => {
+      alert("Hiba történt a vágólapra másolás közben.");
+      console.error(err);
+    });
+  }
+});
+
+  
 
 // Pontok hozzáadása a térképhez
 markerPositions.forEach(({ id, x, y }) => {
@@ -59,39 +84,31 @@ function updateTransform() {
   updateMarkerPositions();
 }
 
+let remainingQuestions = [...markerPositions];  // A kérdések másolata
+
 // Következő kérdés kiválasztása
 function askNextQuestion() {
-  if (markerPositions.length === 0) {
-    navbar.textContent = "Minden pontot megválaszoltál!";
-    return;
+  if (remainingQuestions.length === 0) {
+    // Ha már nincs több kérdés, keverjük össze újra
+    remainingQuestions = [...markerPositions];  // Visszaállítjuk az eredeti kérdéseket
+    shuffleArray(remainingQuestions);  // Keverjük össze
+    alert("Újra kezdjük a kérdéseket!");
   }
 
-  currentQuestionIndex = Math.floor(Math.random() * markerPositions.length);
-  navbar.textContent = `Kérdés: Hol van ${markerPositions[currentQuestionIndex].id}?`;
+  // Válasszunk egy véletlenszerű kérdést a maradék kérdések közül
+  const randomIndex = Math.floor(Math.random() * remainingQuestions.length);
+  const currentQuestion = remainingQuestions.splice(randomIndex, 1)[0];  // Eltávolítjuk a választott kérdést
+  currentQuestionIndex = markerPositions.indexOf(currentQuestion);
+  navbar.textContent = `Kérdés: Hol van ${currentQuestion.id}?`;
 }
 
-// Pont kattintási esemény kezelése
-/*mapContainer.addEventListener("click", (e) => {
-    // A legközelebbi `marker-button` osztályú elem keresése
-    const clickedMarker = e.target.closest(".marker-button");
-    const clickedElement = e.target;
-  
-    console.log(clickedMarker);
-    console.log(clickedElement);
-    // Ha nem egy markerre kattintottak, nincs teendő
-    //if (!clickedMarker) return;
-  
-    const clickedId = clickedMarker.id;
-    const correctId = markerPositions[currentQuestionIndex].id;
-  
-    if (clickedId === correctId) {
-      alert("Helyes!");
-      askNextQuestion();
-    } else {
-      alert("Helytelen!");
-    }
-  });*/
-  
+// Keverés függvény
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];  // Elemek csere
+  }
+}
 
 // Egér mozgatás eseményei
 mapContainer.addEventListener("mousedown", (e) => {
