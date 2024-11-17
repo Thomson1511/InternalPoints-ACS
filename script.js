@@ -12,6 +12,45 @@ const markerPositions = [
   { id: "kuvex", x: 360, y: 342 },
   { id: "vamog", x: 414, y: 387 },
   { id: "xomba", x: 512, y: 401 },
+  { id: "gasna", x: 285, y: 342 },
+  { id: "begla", x: 279, y: 367 },
+  { id: "pesat", x: 264, y: 408 },
+  { id: "abeti", x: 253, y: 422 },
+  { id: "sopro", x: 201, y: 454 },
+  { id: "arsin", x: 189, y: 461 },
+  { id: "stein", x: 149, y: 510 },
+  { id: "sasal", x: 116, y: 561 },
+  { id: "sunis", x: 81, y: 611 },
+  { id: "gotar", x: 48, y: 663 },
+  { id: "dimlo", x: 93, y: 781 },
+  { id: "nekin", x: 160, y: 883 },
+  { id: "kopry", x: 223, y: 945 },
+  { id: "vebal", x: 305, y: 1041 },
+  { id: "osduk", x: 517, y: 1118 },
+  { id: "bareb", x: 588, y: 1137 },
+  { id: "babit", x: 720, y: 1071 },
+  { id: "tondo", x: 829, y: 1029 },
+  { id: "kerop", x: 916, y: 978 },
+  { id: "parak", x: 1017, y: 985 },
+  { id: "inved", x: 1095, y: 988 },
+  { id: "mopug", x: 1173, y: 985 },
+  { id: "tegri", x: 1274, y: 946 },
+  { id: "deget", x: 1312, y: 862 },
+  { id: "budop", x: 1368, y: 789 },
+  { id: "megik", x: 1454, y: 597 },
+  { id: "narka", x: 1453, y: 581 },
+  { id: "bador", x: 1512, y: 462 },
+  { id: "karil", x: 1591, y: 377 },
+  { id: "gemto", x: 1623, y: 254 },
+  { id: "lonla", x: 1554, y: 181 },
+  { id: "kenin", x: 1460, y: 175 },
+  { id: "keked", x: 1302, y: 121 },
+  { id: "abuli", x: 1108, y: 136 },
+  { id: "pitok", x: 1080, y: 196 },
+  { id: "demop", x: 1003, y: 251 },
+  { id: "edemu", x: 942, y: 249 },
+  { id: "litku", x: 892, y: 229 },
+  { id: "amrax", x: 834, y: 281 },
 ];
 
 let isPanning = false;
@@ -24,6 +63,7 @@ let currentQuestionIndex = -1;
 //Koordináták szerzése
 
 let mouseX, mouseY;  // Az egér koordinátái
+let addNo = 1;
 
 // Egér mozgatás esemény
 mapContainer.addEventListener("mousemove", (e) => {
@@ -36,9 +76,9 @@ mapContainer.addEventListener("mousemove", (e) => {
 // Koordináták másolása a vágólapra space lenyomására
 document.addEventListener("keydown", (e) => {
   if (e.key === " ") {  // Ha a space billentyűt lenyomják
-    const markerData = `{ id: "marker5", x: ${mouseX}, y: ${mouseY} }`;  // Formázott szöveg
+    const markerData = `{ id: "valami${addNo}", x: ${mouseX}, y: ${mouseY} },`;  // Formázott szöveg
+    addNo += 1;
     navigator.clipboard.writeText(markerData).then(() => {
-      alert("Koordináták másolva a vágólapra!");
     }).catch(err => {
       alert("Hiba történt a vágólapra másolás közben.");
       console.error(err);
@@ -86,8 +126,8 @@ function updateMarkerPositions() {
     const scaledY = y * scale + translateY;
     marker.style.left = `${scaledX}px`;
     marker.style.top = `${scaledY}px`;
-    marker.style.width = `${20 * scale}px`; // Marker méretének frissítése
-    marker.style.height = `${20 * scale}px`; // Marker méretének frissítése
+    marker.style.width = `${12 * scale}px`; // Marker méretének frissítése
+    marker.style.height = `${12 * scale}px`; // Marker méretének frissítése
   });
 }
 
