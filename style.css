@@ -35,6 +35,7 @@ body {
     z-index: 10;
     transform: translate(-50%, -50%);
     pointer-events: auto; /* Ne zavarja a térkép mozgatását */
+    cursor: pointer;
   }
   #navbar {
     position: fixed;

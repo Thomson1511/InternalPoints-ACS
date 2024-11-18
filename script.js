@@ -54,12 +54,31 @@ const markerPositions = [
   { id: "balap", x: 806, y: 290 },
 ];
 
+// Kezdeti pozíció és zoom értékek
+const initialDesktopSettings = { x: 967, y: 594, scale: 0.8 };
+const initialMobileSettings = { x: 967, y: 594, scale: 0.6 };
+
+function setInitialView() {
+  const isMobile = window.innerWidth <= 768; // Mobilnak tekintjük, ha a szélesség 768px vagy kisebb
+
+  const settings = isMobile ? initialMobileSettings : initialDesktopSettings;
+  scale = settings.scale;
+
+  // Számítsuk ki az eltolásokat
+  const rect = mapContainer.getBoundingClientRect();
+  translateX = rect.width / 2 - settings.x * scale;
+  translateY = rect.height / 2 - settings.y * scale;
+
+  updateTransform(); // Frissítjük a térképet
+  updateMarkerPositions(); // Markerek pozíciójának frissítése
+}
+
+// Betöltéskor beállítjuk a kezdeti nézetet
+window.addEventListener("load", setInitialView);
+
 let isPanning = false;
 let startX, startY;
 let currentQuestionIndex = -1;
-
-
-
 
 //Koordináták szerzése
 
