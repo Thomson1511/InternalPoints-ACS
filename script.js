@@ -52,6 +52,13 @@ const markerPositions = [
   { id: "litku", x: 892, y: 229 },
   { id: "amrax", x: 834, y: 281 },
   { id: "balap", x: 806, y: 290 },
+  { id: "patak", x: 776, y: 288 },
+  { id: "badov", x: 701, y: 307 },
+  { id: "ergom", x: 679, y: 385 },
+  { id: "alamu", x: 579, y: 408 },
+
+
+
 ];
 
 // Kezdeti pozíció és zoom értékek
