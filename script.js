@@ -345,8 +345,6 @@ mapContainer.addEventListener("wheel", (e) => {
   updateTransform();
   updateMarkerPositions(); // Markerek helyének frissítése
 });
-
-
 /*
 //Zoomolás telefonon
 let lastTouchCenterX = 0;
@@ -414,48 +412,72 @@ mapContainer.addEventListener("touchend", (e) => {
 });
 */
 
-let initialDistance = 0;
-let initialScale = scale;
+let initialTouchDistance = 0; // Kezdeti kétujjas távolság
+let initialTouchCenter = { x: 0, y: 0 }; // Kétujjas érintés középpontja
+let initialTranslateX = 0; // Kezdeti eltolás X tengelyen
+let initialTranslateY = 0; // Kezdeti eltolás Y tengelyen
+let isZooming = false; // Zoom állapot követése
 
-// Érintés kezdetekor rögzítjük a pozíciókat
+// Érintés kezdése
 mapContainer.addEventListener("touchstart", (e) => {
   if (e.touches.length === 2) {
-    isPanning = false; // Zoomoláskor nem panningelünk
-    initialDistance = getDistance(e.touches[0], e.touches[1]);
-    initialScale = scale;
-  } else if (e.touches.length === 1) {
-    isPanning = true;
-    startX = e.touches[0].clientX - translateX;
-    startY = e.touches[0].clientY - translateY;
+    // Kétujjas érintés esetén kezdeti értékek mentése
+    isZooming = true;
+    initialTouchDistance = Math.hypot(
+      e.touches[0].clientX - e.touches[1].clientX,
+      e.touches[0].clientY - e.touches[1].clientY
+    );
+    initialTouchCenter = {
+      x: (e.touches[0].clientX + e.touches[1].clientX) / 2,
+      y: (e.touches[0].clientY + e.touches[1].clientY) / 2,
+    };
+    initialTranslateX = translateX;
+    initialTranslateY = translateY;
   }
 });
 
-// Érintések mozgatása közben
+// Érintés mozgása
 mapContainer.addEventListener("touchmove", (e) => {
-  if (e.touches.length === 2) {
-    e.preventDefault(); // Ne görgessen az oldalon
-    const currentDistance = getDistance(e.touches[0], e.touches[1]);
-    const scaleChange = currentDistance / initialDistance;
-    scale = Math.max(0.1, Math.min(initialScale * scaleChange, 5)); // Zoom határok
+  if (e.touches.length === 2 && isZooming) {
+    // Zoom érték frissítése
+    const currentTouchDistance = Math.hypot(
+      e.touches[0].clientX - e.touches[1].clientX,
+      e.touches[0].clientY - e.touches[1].clientY
+    );
+    const scaleChange = currentTouchDistance / initialTouchDistance;
+    scale *= scaleChange;
+
+    // Középpont alapján eltolás számítása
+    const currentTouchCenter = {
+      x: (e.touches[0].clientX + e.touches[1].clientX) / 2,
+      y: (e.touches[0].clientY + e.touches[1].clientY) / 2,
+    };
+    translateX =
+      initialTranslateX +
+      (currentTouchCenter.x - initialTouchCenter.x) +
+      (1 - scaleChange) * (currentTouchCenter.x - mapContainer.clientWidth / 2);
+    translateY =
+      initialTranslateY +
+      (currentTouchCenter.y - initialTouchCenter.y) +
+      (1 - scaleChange) * (currentTouchCenter.y - mapContainer.clientHeight / 2);
+
+    // Transform frissítése
     updateTransform();
-  } else if (e.touches.length === 1 && isPanning) {
-    translateX = e.touches[0].clientX - startX;
-    translateY = e.touches[0].clientY - startY;
-    updateTransform();
+
+    // Új kezdeti értékek mentése
+    initialTouchDistance = currentTouchDistance;
+    initialTouchCenter = currentTouchCenter;
+    initialTranslateX = translateX;
+    initialTranslateY = translateY;
   }
 });
 
 // Érintés vége
-mapContainer.addEventListener("touchend", () => {
-  if (isPanning && scale !== initialScale) isPanning = false;
+mapContainer.addEventListener("touchend", (e) => {
+  if (e.touches.length < 2) {
+    isZooming = false;
+  }
 });
-
-// Két pont közötti távolság kiszámítása
-function getDistance(touch1, touch2) {
-  const dx = touch1.clientX - touch2.clientX;
-  const dy = touch1.clientY - touch2.clientY;
-  return Math.sqrt(dx * dx + dy * dy);
-}
 
 
 // Indítás
