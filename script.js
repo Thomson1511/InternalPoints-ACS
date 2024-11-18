@@ -51,6 +51,7 @@ const markerPositions = [
   { id: "edemu", x: 942, y: 249 },
   { id: "litku", x: 892, y: 229 },
   { id: "amrax", x: 834, y: 281 },
+  { id: "balap", x: 806, y: 290 },
 ];
 
 let isPanning = false;
@@ -240,48 +241,70 @@ mapContainer.addEventListener("wheel", (e) => {
 
 
 //Zoomolás telefonon
-let lastDistance = 0;  // Az előző távolság két ujj között
+let lastTouchCenterX = 0;
+let lastTouchCenterY = 0;
+let lastScale = scale;
 
 mapContainer.addEventListener("touchstart", (e) => {
   if (e.touches.length === 2) {
-    // Ha két ujj van az érintőképernyőn, tároljuk az első távolságot
+    // Kezdeti két ujj középpontjának meghatározása
     const x1 = e.touches[0].clientX;
     const y1 = e.touches[0].clientY;
     const x2 = e.touches[1].clientX;
     const y2 = e.touches[1].clientY;
-    lastDistance = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2); // Két ujj távolsága
+
+    lastTouchCenterX = (x1 + x2) / 2;
+    lastTouchCenterY = (y1 + y2) / 2;
+
+    // Kezdeti távolság
+    lastDistance = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
   }
 });
 
 mapContainer.addEventListener("touchmove", (e) => {
   if (e.touches.length === 2) {
+    e.preventDefault();
+
     const x1 = e.touches[0].clientX;
     const y1 = e.touches[0].clientY;
     const x2 = e.touches[1].clientX;
     const y2 = e.touches[1].clientY;
-    const currentDistance = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2); // Két ujj aktuális távolsága
 
-    if (lastDistance) {
-      const scaleFactor = 0.05; // Az újrarendelési sebesség (finomítható)
+    // Új két ujj közötti távolság
+    const currentDistance = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
 
-      // Ha a két ujj közötti távolság nőtt (zoom in), akkor növeljük a skálát
-      if (currentDistance > lastDistance) {
-        scale *= (1 + scaleFactor);
-      } else if (currentDistance < lastDistance) {  // Ha csökkent (zoom out), akkor csökkentjük a skálát
-        scale /= (1 + scaleFactor);
-      }
+    // Új két ujj középpontjának meghatározása
+    const touchCenterX = (x1 + x2) / 2;
+    const touchCenterY = (y1 + y2) / 2;
 
-      lastDistance = currentDistance; // Frissítjük az előző távolságot
-      updateTransform(); // Alkalmazzuk a változtatásokat
-    }
+    // Középpont világkoordinátái
+    const rect = mapContainer.getBoundingClientRect();
+    const worldCenterX = (touchCenterX - rect.left - translateX) / scale;
+    const worldCenterY = (touchCenterY - rect.top - translateY) / scale;
+
+    // Zoom mértékének kiszámítása
+    const scaleFactor = currentDistance / lastDistance;
+    scale *= scaleFactor;
+
+    // Új eltolás kiszámítása
+    translateX = touchCenterX - worldCenterX * scale;
+    translateY = touchCenterY - worldCenterY * scale;
+
+    lastDistance = currentDistance; // Frissítsük a távolságot
+    lastTouchCenterX = touchCenterX;
+    lastTouchCenterY = touchCenterY;
+
+    updateTransform(); // Frissítsük a térképet
+    updateMarkerPositions(); // Markerek frissítése
   }
 });
 
 mapContainer.addEventListener("touchend", (e) => {
   if (e.touches.length < 2) {
-    lastDistance = 0; // Töröljük a távolságot, ha már nincs két ujj
+    lastDistance = 0; // Reseteljük a távolságot
   }
 });
+
 
 
 // Indítás
