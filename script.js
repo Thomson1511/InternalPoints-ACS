@@ -56,7 +56,7 @@ const markerPositions = [
 
 // Kezdeti pozíció és zoom értékek
 const initialDesktopSettings = { x: 967, y: 594, scale: 0.8 };
-const initialMobileSettings = { x: 967, y: 594, scale: 0.6 };
+const initialMobileSettings = { x: 967, y: 594, scale: 0.3 };
 
 function setInitialView() {
   const isMobile = window.innerWidth <= 768; // Mobilnak tekintjük, ha a szélesség 768px vagy kisebb
