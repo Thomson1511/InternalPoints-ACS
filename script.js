@@ -56,14 +56,14 @@ const markerPositions = [
   { id: "badov", x: 701, y: 307 },
   { id: "ergom", x: 679, y: 385 },
   { id: "alamu", x: 579, y: 408 },
-
-
-
+  { id: "valami1", x: 353, y: 519 },
+  { id: "valami2", x: 327, y: 579 },
+  { id: "valami3", x: 460, y: 535 },
 ];
 
 // Kezdeti pozíció és zoom értékek
 const initialDesktopSettings = { x: 967, y: 594, scale: 0.8 };
-const initialMobileSettings = { x: 967, y: 594, scale: 0.3 };
+const initialMobileSettings = { x: 867, y: 594, scale: 0.2 };
 
 function setInitialView() {
   const isMobile = window.innerWidth <= 768; // Mobilnak tekintjük, ha a szélesség 768px vagy kisebb
@@ -106,7 +106,10 @@ mapContainer.addEventListener("mousemove", (e) => {
 // Koordináták másolása a vágólapra space lenyomására
 document.addEventListener("keydown", (e) => {
   if (e.key === " ") {  // Ha a space billentyűt lenyomják
-    const markerData = `{ id: "valami${addNo}", x: ${mouseX}, y: ${mouseY} },`;  // Formázott szöveg
+    // Egérpozíció kerekítése
+    const roundedMouseX = Math.round(mouseX);
+    const roundedMouseY = Math.round(mouseY);
+    const markerData = `{ id: "valami${addNo}", x: ${roundedMouseX}, y: ${roundedMouseY} },`;  // Formázott szöveg
     addNo += 1;
     navigator.clipboard.writeText(markerData).then(() => {
     }).catch(err => {
