@@ -210,25 +210,33 @@ mapContainer.addEventListener("touchend", () => (isPanning = false));
 // Zoomolás
 mapContainer.addEventListener("wheel", (e) => {
   e.preventDefault();
-  const scaleFactor = 1.1;
-  const oldScale = scale;
 
+  const scaleFactor = 1.1; // Zoom faktor
+  const rect = mapContainer.getBoundingClientRect();
+
+  // Egér pozíciója a térkép konténeréhez képest
+  const mouseX = e.clientX - rect.left;
+  const mouseY = e.clientY - rect.top;
+
+  // Egér pozíciója az aktuális skálázáshoz igazítva
+  const worldX = (mouseX - translateX) / scale;
+  const worldY = (mouseY - translateY) / scale;
+
+  // Frissítjük a skálát
   if (e.deltaY < 0) {
     scale *= scaleFactor; // Zoom in
   } else {
     scale /= scaleFactor; // Zoom out
   }
 
-  const rect = mapContainer.getBoundingClientRect();
-  const mouseX = e.clientX - rect.left;
-  const mouseY = e.clientY - rect.top;
-
-  translateX -= mouseX / oldScale - mouseX / scale;
-  translateY -= mouseY / oldScale - mouseY / scale;
+  // Új hely kiszámítása az egér pozíciójához igazítva
+  translateX = mouseX - worldX * scale;
+  translateY = mouseY - worldY * scale;
 
   updateTransform();
-  updateMarkerPositions(); // Markerek frissítése a zoom után
+  updateMarkerPositions(); // Markerek helyének frissítése
 });
+
 
 
 //Zoomolás telefonon
