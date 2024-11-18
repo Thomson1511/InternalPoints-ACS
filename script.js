@@ -1,119 +1,33 @@
 const markerPositions = [
-  { id: "natex", x: 374, y: 400 },
-  { id: "tekno", x: 351, y: 444 },
-  { id: "kuvex", x: 360, y: 342 },
-  { id: "vamog", x: 414, y: 387 },
-  { id: "xomba", x: 512, y: 401 },
-  { id: "gasna", x: 285, y: 342 },
-  { id: "begla", x: 279, y: 367 },
-  { id: "pesat", x: 264, y: 408 },
-  { id: "abeti", x: 253, y: 422 },
-  { id: "sopro", x: 201, y: 454 },
-  { id: "arsin", x: 189, y: 461 },
-  { id: "stein", x: 149, y: 510 },
-  { id: "sasal", x: 116, y: 561 },
-  { id: "sunis", x: 81, y: 611 },
-  { id: "gotar", x: 48, y: 663 },
-  { id: "dimlo", x: 93, y: 781 },
-  { id: "nekin", x: 160, y: 883 },
-  { id: "kopry", x: 223, y: 945 },
-  { id: "vebal", x: 305, y: 1041 },
-  { id: "osduk", x: 517, y: 1118 },
-  { id: "bareb", x: 588, y: 1137 },
-  { id: "babit", x: 720, y: 1071 },
-  { id: "tondo", x: 829, y: 1029 },
-  { id: "kerop", x: 916, y: 978 },
-  { id: "parak", x: 1017, y: 985 },
-  { id: "inved", x: 1095, y: 988 },
-  { id: "mopug", x: 1173, y: 985 },
-  { id: "tegri", x: 1274, y: 946 },
-  { id: "deget", x: 1312, y: 862 },
-  { id: "budop", x: 1368, y: 789 },
-  { id: "megik", x: 1454, y: 597 },
-  { id: "narka", x: 1453, y: 581 },
-  { id: "bador", x: 1512, y: 462 },
-  { id: "karil", x: 1591, y: 377 },
-  { id: "gemto", x: 1623, y: 254 },
-  { id: "lonla", x: 1554, y: 181 },
-  { id: "kenin", x: 1460, y: 175 },
-  { id: "keked", x: 1302, y: 121 },
-  { id: "abuli", x: 1108, y: 136 },
-  { id: "pitok", x: 1080, y: 196 },
-  { id: "demop", x: 1003, y: 251 },
-  { id: "edemu", x: 942, y: 249 },
-  { id: "litku", x: 892, y: 229 },
-  { id: "amrax", x: 834, y: 281 },
-  { id: "balap", x: 806, y: 290 },
-  { id: "patak", x: 776, y: 288 },
-  { id: "badov", x: 701, y: 307 },
-  { id: "ergom", x: 679, y: 385 },
-  { id: "alamu", x: 579, y: 408 },
-  { id: "subes", x: 353, y: 519 },
-  { id: "sirdu", x: 327, y: 579 },
-  { id: "ogvun", x: 460, y: 535 },
-  { id: "zolku", x: 449, y: 472 },
-  { id: "nohat", x: 146, y: 735 },
-  { id: "nalox", x: 195, y: 715 },
-  { id: "sunor", x: 311, y: 862 },
-  { id: "olati", x: 362, y: 677 },
-  { id: "nikab", x: 375, y: 813 },
-  { id: "sogmo", x: 409, y: 817 },
-  { id: "pidon", x: 502, y: 998 },
-  { id: "okora", x: 583, y: 764 },
-  { id: "gitas", x: 536, y: 658 },
-  { id: "gilep", x: 560, y: 502 },
-  { id: "vajdi", x: 566, y: 541 },
-  { id: "ulzak", x: 634, y: 681 },
-  { id: "duzla", x: 674, y: 694 },
-  { id: "fahaz", x: 754, y: 721 },
-  { id: "gazda", x: 841, y: 752 },
-  { id: "ebamo", x: 890, y: 741 },
-  { id: "kezal", x: 1049, y: 624 },
-  { id: "vetik", x: 1049, y: 552 },
-  { id: "beted", x: 1047, y: 288 },
-  { id: "gelka", x: 1046, y: 276 },
-  { id: "witri", x: 1019, y: 261 },
-  { id: "bodza", x: 603, y: 474 },
-  { id: "torno", x: 618, y: 481 },
-  { id: "pucog", x: 641, y: 527 },
-  { id: "vebos", x: 652, y: 567 },
-  { id: "jozep", x: 678, y: 610 },
-  { id: "rakfa", x: 608, y: 607 },
-  { id: "pusta, PTB VOR", x: 678, y: 624 },
-  { id: "epari", x: 738, y: 429 },
-  { id: "etaro", x: 743, y: 497 },
-  { id: "balux", x: 776, y: 555 },
-  { id: "dodar", x: 874, y: 602 },
-  { id: "ilhak", x: 835, y: 691 },
-  { id: "babox", x: 912, y: 718 },
-  { id: "erguz", x: 944, y: 662 },
-  { id: "abony", x: 986, y: 581 },
-  { id: "zurfa", x: 952, y: 535 },
-  { id: "norah", x: 943, y: 455 },
-  { id: "nipur", x: 993, y: 418 },
-  { id: "lahor", x: 923, y: 375 },
-  { id: "boksi", x: 949, y: 814 },
-  { id: "oslen", x: 1083, y: 779 },
-  { id: "binku", x: 1106, y: 707 },
-  { id: "uvera", x: 1098, y: 607 },
-  { id: "mavir", x: 949, y: 900 },
-  { id: "eboro", x: 990, y: 916 },
-  { id: "verig", x: 1421, y: 610 },
-  { id: "perit", x: 1390, y: 385 },
-  { id: "kovek", x: 1114, y: 370 },
-  { id: "mizol", x: 1048, y: 239 },
-  { id: "rigsa", x: 1173, y: 253 },
-  { id: "ibliz", x: 1185, y: 199 },
-  { id: "romka", x: 1439, y: 226 },
-  { id: "kusis", x: 1576, y: 349 },
-  { id: "GYR VOR", x: 429, y: 434 },
-  { id: "SVR VOR", x: 521, y: 740 },
-  { id: "BUD VOR", x: 805, y: 516 },
-  { id: "TPS VOR", x: 854, y: 501 },
-  { id: "MNR VOR", x: 844, y: 558 },
-  { id: "BKS VOR", x: 1261, y: 751 },
-  { id: "SAG VOR", x: 1234, y: 309 },
-  { id: "BUG VOR", x: 910, y: 800 }
+  { id: "natex", x: 374, y: 400 },          { id: "tekno", x: 351, y: 444 },        { id: "kuvex", x: 360, y: 342 },        { id: "vamog", x: 414, y: 387 },
+  { id: "xomba", x: 512, y: 401 },          { id: "gasna", x: 285, y: 342 },        { id: "begla", x: 279, y: 367 },        { id: "pesat", x: 264, y: 408 },
+  { id: "abeti", x: 253, y: 422 },          { id: "sopro", x: 201, y: 454 },        { id: "arsin", x: 189, y: 461 },        { id: "stein", x: 149, y: 510 },
+  { id: "sasal", x: 116, y: 561 },          { id: "sunis", x: 81, y: 611 },         { id: "gotar", x: 48, y: 663 },         { id: "dimlo", x: 93, y: 781 },
+  { id: "nekin", x: 160, y: 883 },          { id: "kopry", x: 223, y: 945 },        { id: "vebal", x: 305, y: 1041 },       { id: "osduk", x: 517, y: 1118 },
+  { id: "bareb", x: 588, y: 1137 },         { id: "babit", x: 720, y: 1071 },       { id: "tondo", x: 829, y: 1029 },       { id: "kerop", x: 916, y: 978 },
+  { id: "parak", x: 1017, y: 985 },         { id: "inved", x: 1095, y: 988 },       { id: "mopug", x: 1173, y: 985 },       { id: "tegri", x: 1274, y: 946 },
+  { id: "deget", x: 1312, y: 862 },         { id: "budop", x: 1368, y: 789 },       { id: "megik", x: 1454, y: 597 },       { id: "narka", x: 1453, y: 581 },
+  { id: "bador", x: 1512, y: 462 },         { id: "karil", x: 1591, y: 377 },       { id: "gemto", x: 1623, y: 254 },       { id: "lonla", x: 1554, y: 181 },
+  { id: "kenin", x: 1460, y: 175 },         { id: "keked", x: 1302, y: 121 },       { id: "abuli", x: 1108, y: 136 },       { id: "pitok", x: 1080, y: 196 },
+  { id: "demop", x: 1003, y: 251 },         { id: "edemu", x: 942, y: 249 },        { id: "litku", x: 892, y: 229 },        { id: "amrax", x: 834, y: 281 },
+  { id: "balap", x: 806, y: 290 },          { id: "patak", x: 776, y: 288 },        { id: "badov", x: 701, y: 307 },        { id: "ergom", x: 679, y: 385 },
+  { id: "alamu", x: 579, y: 408 },          { id: "subes", x: 353, y: 519 },        { id: "sirdu", x: 327, y: 579 },        { id: "ogvun", x: 460, y: 535 },
+  { id: "zolku", x: 449, y: 472 },          { id: "nohat", x: 146, y: 735 },        { id: "nalox", x: 195, y: 715 },        { id: "sunor", x: 311, y: 862 },
+  { id: "olati", x: 362, y: 677 },          { id: "nikab", x: 375, y: 813 },        { id: "sogmo", x: 409, y: 817 },        { id: "pidon", x: 502, y: 998 },
+  { id: "okora", x: 583, y: 764 },          { id: "gitas", x: 536, y: 658 },        { id: "gilep", x: 560, y: 502 },        { id: "vajdi", x: 566, y: 541 },
+  { id: "ulzak", x: 634, y: 681 },          { id: "duzla", x: 674, y: 694 },        { id: "fahaz", x: 754, y: 721 },        { id: "gazda", x: 841, y: 752 },
+  { id: "ebamo", x: 890, y: 741 },          { id: "kezal", x: 1049, y: 624 },       { id: "vetik", x: 1049, y: 552 },       { id: "beted", x: 1047, y: 288 },
+  { id: "gelka", x: 1046, y: 276 },         { id: "witri", x: 1019, y: 261 },       { id: "bodza", x: 603, y: 474 },        { id: "torno", x: 618, y: 481 },
+  { id: "pucog", x: 641, y: 527 },          { id: "vebos", x: 652, y: 567 },        { id: "jozep", x: 678, y: 610 },        { id: "rakfa", x: 608, y: 607 },
+  { id: "pusta, PTB VOR", x: 678, y: 624 }, { id: "epari", x: 738, y: 429 },        { id: "etaro", x: 743, y: 497 },        { id: "balux", x: 776, y: 555 },
+  { id: "dodar", x: 874, y: 602 },          { id: "ilhak", x: 835, y: 691 },        { id: "babox", x: 912, y: 718 },        { id: "erguz", x: 944, y: 662 },
+  { id: "abony", x: 986, y: 581 },          { id: "zurfa", x: 952, y: 535 },        { id: "norah", x: 943, y: 455 },        { id: "nipur", x: 993, y: 418 },
+  { id: "lahor", x: 923, y: 375 },          { id: "boksi", x: 949, y: 814 },        { id: "oslen", x: 1083, y: 779 },       { id: "binku", x: 1106, y: 707 },
+  { id: "uvera", x: 1098, y: 607 },         { id: "mavir", x: 949, y: 900 },        { id: "eboro", x: 990, y: 916 },        { id: "verig", x: 1421, y: 610 },
+  { id: "perit", x: 1390, y: 385 },         { id: "kovek", x: 1114, y: 370 },       { id: "mizol", x: 1048, y: 239 },       { id: "rigsa", x: 1173, y: 253 },
+  { id: "ibliz", x: 1185, y: 199 },         { id: "romka", x: 1439, y: 226 },       { id: "kusis", x: 1576, y: 349 },       { id: "GYR VOR", x: 429, y: 434 },
+  { id: "SVR VOR", x: 521, y: 740 },        { id: "BUD VOR", x: 805, y: 516 },      { id: "TPS VOR", x: 854, y: 501 },      { id: "MNR VOR", x: 844, y: 558 },
+  { id: "BKS VOR", x: 1261, y: 751 },       { id: "SAG VOR", x: 1234, y: 309 },     { id: "BUG VOR", x: 910, y: 800 }
 ];
 
 const mapContainer = document.getElementById("map-container");
@@ -345,7 +259,7 @@ mapContainer.addEventListener("wheel", (e) => {
   updateTransform();
   updateMarkerPositions(); // Markerek helyének frissítése
 });
-/*
+
 //Zoomolás telefonon
 let lastTouchCenterX = 0;
 let lastTouchCenterY = 0;
@@ -410,75 +324,6 @@ mapContainer.addEventListener("touchend", (e) => {
     lastDistance = 0; // Reseteljük a távolságot
   }
 });
-*/
-
-let initialTouchDistance = 0; // Kezdeti kétujjas távolság
-let initialTouchCenter = { x: 0, y: 0 }; // Kétujjas érintés középpontja
-let initialTranslateX = 0; // Kezdeti eltolás X tengelyen
-let initialTranslateY = 0; // Kezdeti eltolás Y tengelyen
-let isZooming = false; // Zoom állapot követése
-
-// Érintés kezdése
-mapContainer.addEventListener("touchstart", (e) => {
-  if (e.touches.length === 2) {
-    // Kétujjas érintés esetén kezdeti értékek mentése
-    isZooming = true;
-    initialTouchDistance = Math.hypot(
-      e.touches[0].clientX - e.touches[1].clientX,
-      e.touches[0].clientY - e.touches[1].clientY
-    );
-    initialTouchCenter = {
-      x: (e.touches[0].clientX + e.touches[1].clientX) / 2,
-      y: (e.touches[0].clientY + e.touches[1].clientY) / 2,
-    };
-    initialTranslateX = translateX;
-    initialTranslateY = translateY;
-  }
-});
-
-// Érintés mozgása
-mapContainer.addEventListener("touchmove", (e) => {
-  if (e.touches.length === 2 && isZooming) {
-    // Zoom érték frissítése
-    const currentTouchDistance = Math.hypot(
-      e.touches[0].clientX - e.touches[1].clientX,
-      e.touches[0].clientY - e.touches[1].clientY
-    );
-    const scaleChange = currentTouchDistance / initialTouchDistance;
-    scale *= scaleChange;
-
-    // Középpont alapján eltolás számítása
-    const currentTouchCenter = {
-      x: (e.touches[0].clientX + e.touches[1].clientX) / 2,
-      y: (e.touches[0].clientY + e.touches[1].clientY) / 2,
-    };
-    translateX =
-      initialTranslateX +
-      (currentTouchCenter.x - initialTouchCenter.x) +
-      (1 - scaleChange) * (currentTouchCenter.x - mapContainer.clientWidth / 2);
-    translateY =
-      initialTranslateY +
-      (currentTouchCenter.y - initialTouchCenter.y) +
-      (1 - scaleChange) * (currentTouchCenter.y - mapContainer.clientHeight / 2);
-
-    // Transform frissítése
-    updateTransform();
-
-    // Új kezdeti értékek mentése
-    initialTouchDistance = currentTouchDistance;
-    initialTouchCenter = currentTouchCenter;
-    initialTranslateX = translateX;
-    initialTranslateY = translateY;
-  }
-});
-
-// Érintés vége
-mapContainer.addEventListener("touchend", (e) => {
-  if (e.touches.length < 2) {
-    isZooming = false;
-  }
-});
-
 
 // Indítás
 askNextQuestion();
