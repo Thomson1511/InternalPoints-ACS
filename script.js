@@ -74,7 +74,10 @@ function setInitialView() {
 }
 
 // Betöltéskor beállítjuk a kezdeti nézetet
-window.addEventListener("load", setInitialView);
+document.addEventListener("DOMContentLoaded", () => {
+  // Várjuk meg, hogy minden stílus alkalmazva legyen
+  setTimeout(setInitialView, 100); // Kis késleltetés a CSS betöltésére
+});
 
 let isPanning = false;
 let startX, startY;
@@ -107,9 +110,6 @@ document.addEventListener("keydown", (e) => {
 });
 
 //Koordináták szerzésének vége
-
-
-
 
 // Pontok hozzáadása a térképhez
 markerPositions.forEach(({ id, x, y }) => {
