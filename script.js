@@ -1,6 +1,6 @@
 const mapContainer = document.getElementById("map-container");
 const map = document.getElementById("map");
-const navbar = document.getElementById("navbar");
+const NavBarQuestion = document.getElementById("NavBarQuestion");
 
 let scale = 1;
 let translateX = 0;
@@ -56,9 +56,72 @@ const markerPositions = [
   { id: "badov", x: 701, y: 307 },
   { id: "ergom", x: 679, y: 385 },
   { id: "alamu", x: 579, y: 408 },
-  { id: "valami1", x: 353, y: 519 },
-  { id: "valami2", x: 327, y: 579 },
-  { id: "valami3", x: 460, y: 535 },
+  { id: "subes", x: 353, y: 519 },
+  { id: "sirdu", x: 327, y: 579 },
+  { id: "ogvun", x: 460, y: 535 },
+  { id: "zolku", x: 449, y: 472 },
+  { id: "nohat", x: 146, y: 735 },
+  { id: "nalox", x: 195, y: 715 },
+  { id: "sunor", x: 311, y: 862 },
+  { id: "olati", x: 362, y: 677 },
+  { id: "nikab", x: 375, y: 813 },
+  { id: "sogmo", x: 409, y: 817 },
+  { id: "pidon", x: 502, y: 998 },
+  { id: "okora", x: 583, y: 764 },
+  { id: "gitas", x: 536, y: 658 },
+  { id: "gilep", x: 560, y: 502 },
+  { id: "vajdi", x: 566, y: 541 },
+  { id: "ulzak", x: 634, y: 681 },
+  { id: "duzla", x: 674, y: 694 },
+  { id: "fahaz", x: 754, y: 721 },
+  { id: "gazda", x: 841, y: 752 },
+  { id: "ebamo", x: 890, y: 741 },
+  { id: "kezal", x: 1049, y: 624 },
+  { id: "vetik", x: 1049, y: 552 },
+  { id: "beted", x: 1047, y: 288 },
+  { id: "gelka", x: 1046, y: 276 },
+  { id: "witri", x: 1019, y: 261 },
+  { id: "bodza", x: 603, y: 474 },
+  { id: "torno", x: 618, y: 481 },
+  { id: "pucog", x: 641, y: 527 },
+  { id: "vebos", x: 652, y: 567 },
+  { id: "jozep", x: 678, y: 610 },
+  { id: "rakfa", x: 608, y: 607 },
+  { id: "pusta, PTB VOR", x: 678, y: 624 },
+  { id: "epari", x: 738, y: 429 },
+  { id: "etaro", x: 743, y: 497 },
+  { id: "balux", x: 776, y: 555 },
+  { id: "dodar", x: 874, y: 602 },
+  { id: "ilhak", x: 835, y: 691 },
+  { id: "babox", x: 912, y: 718 },
+  { id: "erguz", x: 944, y: 662 },
+  { id: "abony", x: 986, y: 581 },
+  { id: "zurfa", x: 952, y: 535 },
+  { id: "norah", x: 943, y: 455 },
+  { id: "nipur", x: 993, y: 418 },
+  { id: "lahor", x: 923, y: 375 },
+  { id: "boksi", x: 949, y: 814 },
+  { id: "oslen", x: 1083, y: 779 },
+  { id: "binku", x: 1106, y: 707 },
+  { id: "uvera", x: 1098, y: 607 },
+  { id: "mavir", x: 949, y: 900 },
+  { id: "eboro", x: 990, y: 916 },
+  { id: "verig", x: 1421, y: 610 },
+  { id: "perit", x: 1390, y: 385 },
+  { id: "kovek", x: 1114, y: 370 },
+  { id: "mizol", x: 1048, y: 239 },
+  { id: "rigsa", x: 1173, y: 253 },
+  { id: "ibliz", x: 1185, y: 199 },
+  { id: "romka", x: 1439, y: 226 },
+  { id: "kusis", x: 1576, y: 349 },
+  { id: "GYR VOR", x: 429, y: 434 },
+  { id: "SVR VOR", x: 521, y: 740 },
+  { id: "BUD VOR", x: 805, y: 516 },
+  { id: "TPS VOR", x: 854, y: 501 },
+  { id: "MNR VOR", x: 844, y: 558 },
+  { id: "BKS VOR", x: 1261, y: 751 },
+  { id: "SAG VOR", x: 1234, y: 309 },
+  { id: "BUG VOR", x: 910, y: 800 }
 ];
 
 // Kezdeti pozíció és zoom értékek
@@ -89,6 +152,81 @@ document.addEventListener("DOMContentLoaded", () => {
 let isPanning = false;
 let startX, startY;
 let currentQuestionIndex = -1;
+let questionNumber = 1, errors = 0;
+
+// Pontok hozzáadása a térképhez
+markerPositions.forEach(({ id, x, y }) => {
+  const marker = document.createElement("div");
+  marker.id = id;
+  marker.classList.add("marker-button");
+  marker.style.left = `${x}px`;
+  marker.style.top = `${y}px`;
+  marker.style.width = `${20 * scale}px`; // Marker méretének beállítása a zoom alapján
+  marker.style.height = `${20 * scale}px`; // Marker méretének beállítása a zoom alapján
+  mapContainer.appendChild(marker);
+
+  // OnClick esemény hozzáadása
+  marker.addEventListener("click", () => {
+    const clickedId = marker.id;
+    console.log(clickedId);
+    const correctId = markerPositions[currentQuestionIndex].id;
+
+    if (clickedId === correctId) {
+      alert("Helyes!");
+      askNextQuestion();
+    } else {
+      alert("Helytelen!");
+    }
+  });
+});
+
+let remainingQuestions = [...markerPositions];  // A kérdések másolata
+
+// Következő kérdés kiválasztása
+function askNextQuestion() {
+  if (remainingQuestions.length === 0) {
+    // Ha már nincs több kérdés, keverjük össze újra
+    remainingQuestions = [...markerPositions];  // Visszaállítjuk az eredeti kérdéseket
+    shuffleArray(remainingQuestions);  // Keverjük össze
+    questionNumber = 1;
+    errors = 0;
+    alert("Újra kezdjük a kérdéseket!");
+  }
+
+  // Válasszunk egy véletlenszerű kérdést a maradék kérdések közül
+  const randomIndex = Math.floor(Math.random() * remainingQuestions.length);
+  const currentQuestion = remainingQuestions.splice(randomIndex, 1)[0];  // Eltávolítjuk a választott kérdést
+  currentQuestionIndex = markerPositions.indexOf(currentQuestion);
+  NavBarQuestion.textContent = currentQuestion.id.toUpperCase();
+}
+
+// Keverés függvény
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];  // Elemek csere
+  }
+}
+
+// Pontok pozíciójának és méretének frissítése
+function updateMarkerPositions() {
+  markerPositions.forEach(({ id, x, y }) => {
+    const marker = document.getElementById(id);
+    const scaledX = x * scale + translateX;
+    const scaledY = y * scale + translateY;
+    marker.style.left = `${scaledX}px`;
+    marker.style.top = `${scaledY}px`;
+    marker.style.width = `${12 * scale}px`; // Marker méretének frissítése
+    marker.style.height = `${12 * scale}px`; // Marker méretének frissítése
+  });
+}
+
+
+// Térkép átalakításának frissítése
+function updateTransform() {
+  map.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  updateMarkerPositions();
+}
 
 //Koordináták szerzése
 
@@ -120,79 +258,6 @@ document.addEventListener("keydown", (e) => {
 });
 
 //Koordináták szerzésének vége
-
-// Pontok hozzáadása a térképhez
-markerPositions.forEach(({ id, x, y }) => {
-  const marker = document.createElement("div");
-  marker.id = id;
-  marker.classList.add("marker-button");
-  marker.style.left = `${x}px`;
-  marker.style.top = `${y}px`;
-  marker.style.width = `${20 * scale}px`; // Marker méretének beállítása a zoom alapján
-  marker.style.height = `${20 * scale}px`; // Marker méretének beállítása a zoom alapján
-  mapContainer.appendChild(marker);
-
-  // OnClick esemény hozzáadása
-  marker.addEventListener("click", () => {
-    const clickedId = marker.id;
-    console.log(clickedId);
-    const correctId = markerPositions[currentQuestionIndex].id;
-
-    if (clickedId === correctId) {
-      alert("Helyes!");
-      askNextQuestion();
-    } else {
-      alert("Helytelen!");
-    }
-  });
-});
-
-
-// Pontok pozíciójának és méretének frissítése
-function updateMarkerPositions() {
-  markerPositions.forEach(({ id, x, y }) => {
-    const marker = document.getElementById(id);
-    const scaledX = x * scale + translateX;
-    const scaledY = y * scale + translateY;
-    marker.style.left = `${scaledX}px`;
-    marker.style.top = `${scaledY}px`;
-    marker.style.width = `${12 * scale}px`; // Marker méretének frissítése
-    marker.style.height = `${12 * scale}px`; // Marker méretének frissítése
-  });
-}
-
-
-// Térkép átalakításának frissítése
-function updateTransform() {
-  map.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
-  updateMarkerPositions();
-}
-
-let remainingQuestions = [...markerPositions];  // A kérdések másolata
-
-// Következő kérdés kiválasztása
-function askNextQuestion() {
-  if (remainingQuestions.length === 0) {
-    // Ha már nincs több kérdés, keverjük össze újra
-    remainingQuestions = [...markerPositions];  // Visszaállítjuk az eredeti kérdéseket
-    shuffleArray(remainingQuestions);  // Keverjük össze
-    alert("Újra kezdjük a kérdéseket!");
-  }
-
-  // Válasszunk egy véletlenszerű kérdést a maradék kérdések közül
-  const randomIndex = Math.floor(Math.random() * remainingQuestions.length);
-  const currentQuestion = remainingQuestions.splice(randomIndex, 1)[0];  // Eltávolítjuk a választott kérdést
-  currentQuestionIndex = markerPositions.indexOf(currentQuestion);
-  navbar.textContent = `Kérdés: Hol van ${currentQuestion.id}?`;
-}
-
-// Keverés függvény
-function shuffleArray(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];  // Elemek csere
-  }
-}
 
 // Egér mozgatás eseményei
 mapContainer.addEventListener("mousedown", (e) => {
