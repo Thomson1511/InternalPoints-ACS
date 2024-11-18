@@ -1,11 +1,3 @@
-const mapContainer = document.getElementById("map-container");
-const map = document.getElementById("map");
-const NavBarQuestion = document.getElementById("NavBarQuestion");
-
-let scale = 1;
-let translateX = 0;
-let translateY = 0;
-
 const markerPositions = [
   { id: "natex", x: 374, y: 400 },
   { id: "tekno", x: 351, y: 444 },
@@ -124,6 +116,17 @@ const markerPositions = [
   { id: "BUG VOR", x: 910, y: 800 }
 ];
 
+const mapContainer = document.getElementById("map-container");
+const map = document.getElementById("map");
+const NavBarQuestion = document.getElementById("NavBarQuestion");
+const NavBarCounter = document.getElementById("NavBarCounter");
+const NavBarErrors = document.getElementById("NavBarErrors");
+
+let scale = 1;
+let translateX = 0;
+let translateY = 0;
+
+
 // Kezdeti pozíció és zoom értékek
 const initialDesktopSettings = { x: 967, y: 594, scale: 0.8 };
 const initialMobileSettings = { x: 867, y: 594, scale: 0.2 };
@@ -147,6 +150,7 @@ function setInitialView() {
 document.addEventListener("DOMContentLoaded", () => {
   // Várjuk meg, hogy minden stílus alkalmazva legyen
   setTimeout(setInitialView, 100); // Kis késleltetés a CSS betöltésére
+  updateCounters();
 });
 
 let isPanning = false;
@@ -173,8 +177,12 @@ markerPositions.forEach(({ id, x, y }) => {
 
     if (clickedId === correctId) {
       alert("Helyes!");
+      questionNumber += 1;
       askNextQuestion();
+      updateCounters();
     } else {
+      errors += 1;
+      updateCounters();
       alert("Helytelen!");
     }
   });
@@ -190,6 +198,7 @@ function askNextQuestion() {
     shuffleArray(remainingQuestions);  // Keverjük össze
     questionNumber = 1;
     errors = 0;
+    updateCounters();
     alert("Újra kezdjük a kérdéseket!");
   }
 
@@ -206,6 +215,11 @@ function shuffleArray(array) {
     const j = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]];  // Elemek csere
   }
+}
+
+function updateCounters(){
+  NavBarCounter.innerText = questionNumber + " / " + markerPositions.length;
+  NavBarErrors.innerText = "Errors: " + errors;
 }
 
 // Pontok pozíciójának és méretének frissítése
