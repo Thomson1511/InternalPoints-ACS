@@ -39,7 +39,8 @@ const NavBarErrors = document.getElementById("NavBarErrors");
 let scale = 1;
 let translateX = 0;
 let translateY = 0;
-
+let errorCounter = 0;
+let errorCounterList = [];
 
 // Kezdeti pozíció és zoom értékek
 const initialDesktopSettings = { x: 967, y: 594, scale: 0.8 };
@@ -95,9 +96,22 @@ markerPositions.forEach(({ id, x, y }) => {
       askNextQuestion();
       updateCounters();
     } else {
-      errors += 1;
-      updateCounters();
-      alert("Helytelen!");
+      if (!errorCounterList.includes(clickedId) && errorCounter < 2) {
+        errors += 1;
+        errorCounter += 1;
+        errorCounterList.push(clickedId);
+        updateCounters();
+
+        //ide kell a villogás
+        const clickedMarker = document.getElementById(clickedId);
+        clickedMarker.style.backgroundColor = "red";
+        clickedMarker.style.borderColor = "red";
+        //----
+
+        alert("Helytelen!");
+      } else {
+        console.log("Ez a pont már szerepel az errorCounterList-ben, vagy az errorCounter meghaladta a limitet.");
+      }
     }
   });
 });
