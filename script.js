@@ -104,11 +104,21 @@ markerPositions.forEach(({ id, x, y }) => {
 
         //ide kell a villogás
         const clickedMarker = document.getElementById(clickedId);
-        clickedMarker.style.backgroundColor = "red";
-        clickedMarker.style.borderColor = "red";
+        clickedMarker.style.backgroundColor = "#c20202";
+        clickedMarker.style.borderColor = "#990000";
+        setTimeout(() => {
+          clickedMarker.style.borderColor = "#01702a";
+          clickedMarker.style.backgroundColor = "#00bd46";
+        }, 330);
+        setTimeout(() => {
+          clickedMarker.style.backgroundColor = "#c20202";
+          clickedMarker.style.borderColor = "#990000";
+        }, 650);
+        setTimeout(() => {
+          clickedMarker.style.borderColor = "#990000";
+          clickedMarker.style.backgroundColor = "#00bd46";
+        }, 900);
         //----
-
-        alert("Helytelen!");
       } else {
         console.log("Ez a pont már szerepel az errorCounterList-ben, vagy az errorCounter meghaladta a limitet.");
       }
