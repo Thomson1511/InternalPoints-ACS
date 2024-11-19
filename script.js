@@ -89,10 +89,39 @@ markerPositions.forEach(({ id, x, y }) => {
     const clickedId = marker.id;
     console.log(clickedId);
     const correctId = markerPositions[currentQuestionIndex].id;
+    const clickedMarker = document.getElementById(clickedId);
+
+    function basicMarkerColor(){
+      clickedMarker.style.borderColor = "#01702a";
+      clickedMarker.style.backgroundColor = "#00bd46";
+    }
 
     if (clickedId === correctId) {
-      alert("Helyes!");
+
+      errorCounterList.forEach((id) => {
+        const markerElement = document.getElementById(id);
+        if (markerElement) {
+          markerElement.style.borderColor = "#01702a";
+          markerElement.style.backgroundColor = "#00bd46";
+        }
+      });
+
+      if(errorCounter == 0){
+        clickedMarker.style.borderColor = "#0081b0";
+        clickedMarker.style.backgroundColor = "#00bbff";
+      }
+      else if(errorCounter == 1){
+        clickedMarker.style.borderColor = "#9eba00";
+        clickedMarker.style.backgroundColor = "#d9ff00";
+      }
+      else{
+        clickedMarker.style.backgroundColor = "#c20202";
+        clickedMarker.style.borderColor = "#990000";
+      }
+
       questionNumber += 1;
+      errorCounter = 0;
+      errorCounterList = [];
       askNextQuestion();
       updateCounters();
     } else {
@@ -103,20 +132,19 @@ markerPositions.forEach(({ id, x, y }) => {
         updateCounters();
 
         //ide kell a villogás
-        const clickedMarker = document.getElementById(clickedId);
+
         clickedMarker.style.backgroundColor = "#c20202";
         clickedMarker.style.borderColor = "#990000";
         setTimeout(() => {
-          clickedMarker.style.borderColor = "#01702a";
-          clickedMarker.style.backgroundColor = "#00bd46";
+          basicMarkerColor();
         }, 330);
         setTimeout(() => {
           clickedMarker.style.backgroundColor = "#c20202";
           clickedMarker.style.borderColor = "#990000";
         }, 650);
         setTimeout(() => {
-          clickedMarker.style.borderColor = "#990000";
           clickedMarker.style.backgroundColor = "#00bd46";
+          clickedMarker.style.borderColor = "#990000";
         }, 900);
         //----
       } else {
