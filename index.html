@@ -18,6 +18,25 @@
     <div id="map-container">
         <img src="Map.svg" id="map" alt="Térkép">
     </div>
+    <div id="hintBox">
+        <div id="hintSvg">
+            <span class="ph--mouse-middle-click-fill"></span>
+            <div class="hintText" style="margin-top: 5px;">Move</div>
+        </div>
+        <div id="blue" class="hintCircle">
+            <div class="circle"></div>
+            <div class="hintText">No mistake</div>
+        </div>
+        <div id="yellow" class="hintCircle">
+            <div class="circle"></div>
+            <div class="hintText">1 mistake</div>
+        </div>
+        <div id="red" class="hintCircle">
+            <div class="circle"></div>
+            <div class="hintText">more mistake</div>
+        </div>
+        <button onclick="showHint()">Hint (H)</button>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
