@@ -36,6 +36,12 @@ const NavBarQuestion = document.getElementById("NavBarQuestion");
 const NavBarCounter = document.getElementById("NavBarCounter");
 const NavBarErrors = document.getElementById("NavBarErrors");
 
+document.addEventListener('keydown', function (event) {
+  if (event.key === 'h'){
+    showHint();
+  }
+});
+
 let scale = 1;
 let translateX = 0;
 let translateY = 0;
@@ -155,6 +161,13 @@ markerPositions.forEach(({ id, x, y }) => {
 });
 
 let remainingQuestions = [...markerPositions];  // A kérdések másolata
+
+function showHint(){
+  const currentMarkerId = markerPositions[currentQuestionIndex].id;
+  const currentMarker = document.getElementById(currentMarkerId);
+  currentMarker.style.backgroundColor = "#c20202";
+  currentMarker.style.borderColor = "#990000";
+}
 
 // Következő kérdés kiválasztása
 function askNextQuestion() {
