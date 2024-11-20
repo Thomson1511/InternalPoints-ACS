@@ -79,6 +79,94 @@ let startX, startY;
 let currentQuestionIndex = -1;
 let questionNumber = 1, errors = 0;
 
+// Koordináták keresése a legközelebbi markerhez
+function findNearestMarker(clickX, clickY) {
+  let nearestMarker = null;
+  let minDistance = Infinity;
+
+  markerPositions.forEach(({ id, x, y }) => {
+    const distance = Math.sqrt((clickX - x) ** 2 + (clickY - y) ** 2);
+    if (distance < minDistance) {
+      minDistance = distance;
+      nearestMarker = { id, x, y };
+    }
+  });
+
+  return nearestMarker;
+}
+
+mapContainer.addEventListener("click", (e) => {
+  // Kattintási pozíció meghatározása
+  const rect = mapContainer.getBoundingClientRect();
+  const clickX = (e.clientX - rect.left - translateX) / scale;
+  const clickY = (e.clientY - rect.top - translateY) / scale;
+
+  // Legközelebbi marker keresése
+  const nearestMarker = findNearestMarker(clickX, clickY);
+
+  if (nearestMarker) {
+    const clickedMarker = document.getElementById(nearestMarker.id);
+    const correctId = markerPositions[currentQuestionIndex].id;
+
+    function basicMarkerColor() {
+      clickedMarker.style.borderColor = "#01702a";
+      clickedMarker.style.backgroundColor = "#00bd46";
+    }
+
+    if (nearestMarker.id === correctId) {
+      errorCounterList.forEach((id) => {
+        const markerElement = document.getElementById(id);
+        if (markerElement) {
+          markerElement.style.borderColor = "#01702a";
+          markerElement.style.backgroundColor = "#00bd46";
+        }
+      });
+
+      if (errorCounter === 0) {
+        clickedMarker.style.borderColor = "#0081b0";
+        clickedMarker.style.backgroundColor = "#00bbff";
+      } else if (errorCounter === 1) {
+        clickedMarker.style.borderColor = "#9eba00";
+        clickedMarker.style.backgroundColor = "#d9ff00";
+      } else {
+        clickedMarker.style.backgroundColor = "#c20202";
+        clickedMarker.style.borderColor = "#990000";
+      }
+
+      questionNumber += 1;
+      errorCounter = 0;
+      errorCounterList = [];
+      askNextQuestion();
+      updateCounters();
+    } else {
+      if (!errorCounterList.includes(nearestMarker.id) && errorCounter < 2) {
+        errors += 1;
+        errorCounter += 1;
+        errorCounterList.push(nearestMarker.id);
+        updateCounters();
+
+        clickedMarker.style.backgroundColor = "#c20202";
+        clickedMarker.style.borderColor = "#990000";
+        setTimeout(() => {
+          basicMarkerColor();
+        }, 330);
+        setTimeout(() => {
+          clickedMarker.style.backgroundColor = "#c20202";
+          clickedMarker.style.borderColor = "#990000";
+        }, 650);
+        setTimeout(() => {
+          clickedMarker.style.backgroundColor = "#00bd46";
+          clickedMarker.style.borderColor = "#990000";
+        }, 900);
+      } else {
+        if (errorCounter === 2) {
+          showHint();
+        }
+      }
+    }
+  }
+});
+
 // Pontok hozzáadása a térképhez
 markerPositions.forEach(({ id, x, y }) => {
   const marker = document.createElement("div");
@@ -100,65 +188,6 @@ markerPositions.forEach(({ id, x, y }) => {
     function basicMarkerColor(){
       clickedMarker.style.borderColor = "#01702a";
       clickedMarker.style.backgroundColor = "#00bd46";
-    }
-
-    if (clickedId === correctId) {
-
-      errorCounterList.forEach((id) => {
-        const markerElement = document.getElementById(id);
-        if (markerElement) {
-          markerElement.style.borderColor = "#01702a";
-          markerElement.style.backgroundColor = "#00bd46";
-        }
-      });
-
-      if(errorCounter == 0){
-        clickedMarker.style.borderColor = "#0081b0";
-        clickedMarker.style.backgroundColor = "#00bbff";
-      }
-      else if(errorCounter == 1){
-        clickedMarker.style.borderColor = "#9eba00";
-        clickedMarker.style.backgroundColor = "#d9ff00";
-      }
-      else{
-        clickedMarker.style.backgroundColor = "#c20202";
-        clickedMarker.style.borderColor = "#990000";
-      }
-
-      questionNumber += 1;
-      errorCounter = 0;
-      errorCounterList = [];
-      askNextQuestion();
-      updateCounters();
-    } else {
-      if (!errorCounterList.includes(clickedId) && errorCounter < 2) {
-        errors += 1;
-        errorCounter += 1;
-        errorCounterList.push(clickedId);
-        updateCounters();
-
-        //ide kell a villogás
-
-        clickedMarker.style.backgroundColor = "#c20202";
-        clickedMarker.style.borderColor = "#990000";
-        setTimeout(() => {
-          basicMarkerColor();
-        }, 330);
-        setTimeout(() => {
-          clickedMarker.style.backgroundColor = "#c20202";
-          clickedMarker.style.borderColor = "#990000";
-        }, 650);
-        setTimeout(() => {
-          clickedMarker.style.backgroundColor = "#00bd46";
-          clickedMarker.style.borderColor = "#990000";
-        }, 900);
-        //----
-      } else {
-        if(errorCounter = 2){
-          showHint();
-        }else{}
-        
-      }
     }
   });
 });
