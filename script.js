@@ -83,10 +83,11 @@ let questionNumber = 1, errors = 0;
 function findNearestMarker(clickX, clickY) {
   let nearestMarker = null;
   let minDistance = Infinity;
+  const threshold = 100;
 
   markerPositions.forEach(({ id, x, y }) => {
     const distance = Math.sqrt((clickX - x) ** 2 + (clickY - y) ** 2);
-    if (distance < minDistance) {
+    if (distance < minDistance && distance <= threshold) {
       minDistance = distance;
       nearestMarker = { id, x, y };
     }
