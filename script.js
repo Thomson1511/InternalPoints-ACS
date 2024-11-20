@@ -154,7 +154,10 @@ markerPositions.forEach(({ id, x, y }) => {
         }, 900);
         //----
       } else {
-        console.log("Ez a pont már szerepel az errorCounterList-ben, vagy az errorCounter meghaladta a limitet.");
+        if(errorCounter = 2){
+          showHint();
+        }else{}
+        
       }
     }
   });
@@ -165,8 +168,8 @@ let remainingQuestions = [...markerPositions];  // A kérdések másolata
 function showHint(){
   const currentMarkerId = markerPositions[currentQuestionIndex].id;
   const currentMarker = document.getElementById(currentMarkerId);
-  currentMarker.style.backgroundColor = "#c20202";
-  currentMarker.style.borderColor = "#990000";
+  currentMarker.style.backgroundColor = "#ffa600";
+  currentMarker.style.borderColor = "#ba7900";
 }
 
 // Következő kérdés kiválasztása
