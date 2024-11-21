@@ -50,12 +50,27 @@ let errorCounterList = [];
 
 // Kezdeti pozíció és zoom értékek
 const initialDesktopSettings = { x: 967, y: 594, scale: 0.8 };
+const initialLaptopSettings = { x: 967, y: 580, scale: 0.45 };
 const initialMobileSettings = { x: 867, y: 594, scale: 0.2 };
 
 function setInitialView() {
   const isMobile = window.innerWidth <= 768; // Mobilnak tekintjük, ha a szélesség 768px vagy kisebb
+  const isLaptop = window.innerWidth > 768 && window.innerWidth < 1300;
 
-  const settings = isMobile ? initialMobileSettings : initialDesktopSettings;
+  let settings;
+
+  if(isMobile){
+    settings = initialMobileSettings;
+  }
+  else if(isLaptop){
+    settings = initialLaptopSettings;
+  }
+  else{
+    settings = initialDesktopSettings;
+  }
+
+  
+  //const settings = isMobile ? initialMobileSettings : initialDesktopSettings;
   scale = settings.scale;
 
   // Számítsuk ki az eltolásokat
@@ -110,28 +125,28 @@ mapContainer.addEventListener("click", (e) => {
     const correctId = markerPositions[currentQuestionIndex].id;
 
     function basicMarkerColor() {
-      clickedMarker.style.borderColor = "#01702a";
-      clickedMarker.style.backgroundColor = "#00bd46";
+      clickedMarker.style.borderColor = "#4363d8";  //új kék
+      clickedMarker.style.backgroundColor = "#000075"; //új kék
     }
 
     if (nearestMarker.id === correctId) {
       errorCounterList.forEach((id) => {
         const markerElement = document.getElementById(id);
         if (markerElement) {
-          markerElement.style.borderColor = "#01702a";
-          markerElement.style.backgroundColor = "#00bd46";
+          markerElement.style.borderColor = "#4363d8"; //új kék
+          markerElement.style.backgroundColor = "#000075"; //új kék
         }
       });
 
       if (errorCounter === 0) {
-        clickedMarker.style.borderColor = "#0081b0";
-        clickedMarker.style.backgroundColor = "#00bbff";
+        clickedMarker.style.borderColor = "#3cb44b"; //új zöld
+        clickedMarker.style.backgroundColor = "#3cb44b"; //új zöld
       } else if (errorCounter === 1) {
-        clickedMarker.style.borderColor = "#9eba00";
-        clickedMarker.style.backgroundColor = "#d9ff00";
+        clickedMarker.style.borderColor = "#9eba00"; //sárga
+        clickedMarker.style.backgroundColor = "#ffe119"; //sárga
       } else {
-        clickedMarker.style.backgroundColor = "#c20202";
-        clickedMarker.style.borderColor = "#990000";
+        clickedMarker.style.backgroundColor = "#c20202"; //piros
+        clickedMarker.style.borderColor = "#990000"; //piros
       }
 
       questionNumber += 1;
@@ -146,18 +161,18 @@ mapContainer.addEventListener("click", (e) => {
         errorCounterList.push(nearestMarker.id);
         updateCounters();
 
-        clickedMarker.style.backgroundColor = "#c20202";
-        clickedMarker.style.borderColor = "#990000";
+        clickedMarker.style.backgroundColor = "#c20202"; //piros
+        clickedMarker.style.borderColor = "#990000"; //piros
         setTimeout(() => {
           basicMarkerColor();
         }, 330);
         setTimeout(() => {
-          clickedMarker.style.backgroundColor = "#c20202";
-          clickedMarker.style.borderColor = "#990000";
+          clickedMarker.style.backgroundColor = "#c20202"; //piros
+          clickedMarker.style.borderColor = "#990000"; //piros
         }, 650);
         setTimeout(() => {
-          clickedMarker.style.backgroundColor = "#00bd46";
-          clickedMarker.style.borderColor = "#990000";
+          clickedMarker.style.backgroundColor = "#000075"; //új kék
+          clickedMarker.style.borderColor = "#990000"; //piros
         }, 900);
       } else {
         if (errorCounter === 2) {
@@ -187,8 +202,8 @@ markerPositions.forEach(({ id, x, y }) => {
     const clickedMarker = document.getElementById(clickedId);
 
     function basicMarkerColor(){
-      clickedMarker.style.borderColor = "#01702a";
-      clickedMarker.style.backgroundColor = "#00bd46";
+      clickedMarker.style.borderColor = "#4363d8"; //új kék
+      clickedMarker.style.backgroundColor = "#000075"; //új kék
     }
   });
 });
@@ -198,8 +213,8 @@ let remainingQuestions = [...markerPositions];  // A kérdések másolata
 function showHint(){
   const currentMarkerId = markerPositions[currentQuestionIndex].id;
   const currentMarker = document.getElementById(currentMarkerId);
-  currentMarker.style.backgroundColor = "#ffa600";
-  currentMarker.style.borderColor = "#ba7900";
+  currentMarker.style.backgroundColor = "#f032e6"; //magenta
+  currentMarker.style.borderColor = "#911eb4"; //magenta
 }
 
 // Következő kérdés kiválasztása

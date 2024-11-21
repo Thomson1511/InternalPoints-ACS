@@ -33,8 +33,8 @@ body {
   position: absolute;
   width: 20px;
   height: 20px;
-  background-color: #00bd46;
-  border: 2px solid #01702a;
+  background-color: #000075;
+  border: 2px solid #4363d8;
   border-radius: 50%;
   z-index: 10;
   transform: translate(-50%, -50%);
@@ -89,12 +89,12 @@ body {
   display: flex;
 }
 #blue .circle{
-  border: 2px solid #0081b0;
-  background-color: #00bbff;
+  border: 2px solid #3cb44b;
+  background-color: #3cb44b;
 }
 #yellow .circle{
   border: 2px solid #9eba00;
-  background-color: #d9ff00;
+  background-color: #ffe119;
 }
 #red .circle{
   border: 2px solid #990000;
