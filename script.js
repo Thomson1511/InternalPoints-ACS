@@ -69,8 +69,6 @@ function setInitialView() {
     settings = initialDesktopSettings;
   }
 
-  
-  //const settings = isMobile ? initialMobileSettings : initialDesktopSettings;
   scale = settings.scale;
 
   // Számítsuk ki az eltolásokat
