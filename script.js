@@ -108,13 +108,10 @@ function findNearestMarker(clickX, clickY) {
   });
 
   if (nearestMarker) {
-    console.log("elso")
     if (nearestMarker.id === currentQuestion.id) {
-      console.log("Itt")
       return nearestMarker;
     }
     if (!remainingQuestions.some((question) => question.id === nearestMarker.id)) {
-      console.log("ott")
       return null;
     }
     else{
