@@ -337,20 +337,48 @@ mapContainer.addEventListener("mouseleave", () => (isPanning = false));
 // Érintéses események
 mapContainer.addEventListener("touchstart", (e) => {
   if (e.touches.length === 1) {
+    // Egyujjas panning kezdete
     isPanning = true;
-    startX = e.touches[0].clientX - translateX;
-    startY = e.touches[0].clientY - translateY;
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+  } else if (e.touches.length === 2) {
+    // Kétujjas mozdulat
+    isPanning = true; // Engedélyezzük a panninget
+    startX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+    startY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
   }
 });
 
 mapContainer.addEventListener("touchmove", (e) => {
-  if (!isPanning || e.touches.length !== 1) return;
-  translateX = e.touches[0].clientX - startX;
-  translateY = e.touches[0].clientY - startY;
-  updateTransform();
+  if (isPanning) {
+    if (e.touches.length === 1 || e.touches.length === 2) {
+      // Panning frissítése egy vagy két ujjal
+      const currentX = e.touches.length === 1 
+        ? e.touches[0].clientX 
+        : (e.touches[0].clientX + e.touches[1].clientX) / 2;
+      const currentY = e.touches.length === 1 
+        ? e.touches[0].clientY 
+        : (e.touches[0].clientY + e.touches[1].clientY) / 2;
+
+      const deltaX = currentX - startX;
+      const deltaY = currentY - startY;
+
+      translateX += deltaX;
+      translateY += deltaY;
+
+      startX = currentX;
+      startY = currentY;
+
+      updateTransform();
+    }
+  }
 });
 
-mapContainer.addEventListener("touchend", () => (isPanning = false));
+mapContainer.addEventListener("touchend", (e) => {
+  if (e.touches.length === 0) {
+    isPanning = false;
+  }
+});
 
 // Zoomolás
 mapContainer.addEventListener("wheel", (e) => {
