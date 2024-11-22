@@ -91,6 +91,7 @@ let isPanning = false;
 let startX, startY;
 let currentQuestionIndex = -1;
 let questionNumber = 1, errors = 0;
+let currentQuestion = "";
 
 // Koordináták keresése a legközelebbi markerhez
 function findNearestMarker(clickX, clickY) {
@@ -106,7 +107,20 @@ function findNearestMarker(clickX, clickY) {
     }
   });
 
-  return nearestMarker;
+  if (nearestMarker) {
+    console.log("elso")
+    if (nearestMarker.id === currentQuestion.id) {
+      console.log("Itt")
+      return nearestMarker;
+    }
+    if (!remainingQuestions.some((question) => question.id === nearestMarker.id)) {
+      console.log("ott")
+      return null;
+    }
+    else{
+      return nearestMarker;
+    }
+  }
 }
 
 mapContainer.addEventListener("click", (e) => {
@@ -123,59 +137,59 @@ mapContainer.addEventListener("click", (e) => {
     const correctId = markerPositions[currentQuestionIndex].id;
 
     function basicMarkerColor() {
-      clickedMarker.style.borderColor = "#4363d8";  //új kék
-      clickedMarker.style.backgroundColor = "#000075"; //új kék
+      clickedMarker.style.borderColor = "#4363d8"; 
+      clickedMarker.style.backgroundColor = "#000075";
     }
 
     if (nearestMarker.id === correctId) {
       errorCounterList.forEach((id) => {
         const markerElement = document.getElementById(id);
         if (markerElement) {
-          markerElement.style.borderColor = "#4363d8"; //új kék
-          markerElement.style.backgroundColor = "#000075"; //új kék
+          markerElement.style.borderColor = "#4363d8";
+          markerElement.style.backgroundColor = "#000075";
         }
       });
 
       if (errorCounter === 0) {
-        clickedMarker.style.borderColor = "#3cb44b"; //új zöld
-        clickedMarker.style.backgroundColor = "#3cb44b"; //új zöld
+        clickedMarker.style.borderColor = "#3cb44b";
+        clickedMarker.style.backgroundColor = "#3cb44b";
       } else if (errorCounter === 1) {
-        clickedMarker.style.borderColor = "#9eba00"; //sárga
-        clickedMarker.style.backgroundColor = "#ffe119"; //sárga
+        clickedMarker.style.borderColor = "#9eba00";
+        clickedMarker.style.backgroundColor = "#ffe119";
       } else {
-        clickedMarker.style.backgroundColor = "#c20202"; //piros
-        clickedMarker.style.borderColor = "#990000"; //piros
+        clickedMarker.style.backgroundColor = "#c20202";
+        clickedMarker.style.borderColor = "#990000";
       }
 
+      console.log("jó")
       questionNumber += 1;
       errorCounter = 0;
       errorCounterList = [];
       askNextQuestion();
       updateCounters();
     } else {
+      if(errorCounter == 1){
+        showHint();
+      }
       if (!errorCounterList.includes(nearestMarker.id) && errorCounter < 2) {
         errors += 1;
         errorCounter += 1;
         errorCounterList.push(nearestMarker.id);
         updateCounters();
 
-        clickedMarker.style.backgroundColor = "#c20202"; //piros
-        clickedMarker.style.borderColor = "#990000"; //piros
+        clickedMarker.style.backgroundColor = "#c20202";
+        clickedMarker.style.borderColor = "#990000";
         setTimeout(() => {
           basicMarkerColor();
         }, 330);
         setTimeout(() => {
-          clickedMarker.style.backgroundColor = "#c20202"; //piros
-          clickedMarker.style.borderColor = "#990000"; //piros
+          clickedMarker.style.backgroundColor = "#c20202";
+          clickedMarker.style.borderColor = "#990000";
         }, 650);
         setTimeout(() => {
-          clickedMarker.style.backgroundColor = "#000075"; //új kék
-          clickedMarker.style.borderColor = "#990000"; //piros
+          clickedMarker.style.backgroundColor = "#000075";
+          clickedMarker.style.borderColor = "#990000";
         }, 900);
-      } else {
-        if (errorCounter === 2) {
-          showHint();
-        }
       }
     }
   }
@@ -229,7 +243,7 @@ function askNextQuestion() {
 
   // Válasszunk egy véletlenszerű kérdést a maradék kérdések közül
   const randomIndex = Math.floor(Math.random() * remainingQuestions.length);
-  const currentQuestion = remainingQuestions.splice(randomIndex, 1)[0];  // Eltávolítjuk a választott kérdést
+  currentQuestion = remainingQuestions.splice(randomIndex, 1)[0];  // Eltávolítjuk a választott kérdést
   currentQuestionIndex = markerPositions.indexOf(currentQuestion);
   NavBarQuestion.textContent = currentQuestion.id.toUpperCase();
 }
