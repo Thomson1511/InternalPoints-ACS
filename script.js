@@ -234,8 +234,16 @@ function askNextQuestion() {
     shuffleArray(remainingQuestions);  // Keverjük össze
     questionNumber = 1;
     errors = 0;
+    //ide kell
+    // Minden marker-button alapértelmezett stílusának visszaállítása
+    const markers = document.querySelectorAll(".marker-button");
+    markers.forEach((marker) => {
+      marker.style.backgroundColor = "#000075";
+      marker.style.border = "2px solid #4363d8";
+    });
+    
     updateCounters();
-    alert("Újra kezdjük a kérdéseket!");
+    alert("Refresh");
   }
 
   // Válasszunk egy véletlenszerű kérdést a maradék kérdések közül
