@@ -234,6 +234,7 @@ function askNextQuestion() {
   if (filteredMarkers.length === 0) {
     // Ha már nincs több kérdés, keverjük össze újra
     filteredMarkers = [...markerPositions];  // Visszaállítjuk az eredeti kérdéseket
+    updateMarkers();
     shuffleArray(filteredMarkers);  // Keverjük össze
     questionNumber = 1;
     errors = 0;
@@ -291,7 +292,7 @@ function updateMarkers() {
     console.log("bent");
 
     if (borderChecked) {
-      filteredMarkers.push(...markerPositions.slice(0, 49));
+      filteredMarkers.push(...markerPositions.slice(0, 49)); 
       console.log("borderChecked");
     }
 
@@ -340,9 +341,19 @@ function refreshMarkers() {
 }
 
 // Checkbox változásának figyelése
-borderCheckbox.addEventListener("change", updateMarkers);
-tmaCheckbox.addEventListener("change", updateMarkers);
-elseCheckbox.addEventListener("change", updateMarkers);
+const checkboxes = document.querySelectorAll('input[type="checkbox"]'); // Feltételezve, hogy ezek a szűrő checkboxok
+
+checkboxes.forEach((checkbox) => {
+  checkbox.addEventListener('change', () => {
+    // Újraszűrjük a marker-eket
+    updateMarkers();
+
+    // Ha az aktuális kérdés már nem szerepel a szűrt listában, új kérdést kérdezünk
+    if (!filteredMarkers.some(marker => marker.id === currentQuestion.id)) {
+      askNextQuestion();
+    }
+  });
+});
 
 
 //Ide
