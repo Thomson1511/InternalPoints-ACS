@@ -50,13 +50,12 @@ let translateY = 0;
 let errorCounter = 0;
 let errorCounterList = [];
 
-// Kezdeti pozíció és zoom értékek
 const initialDesktopSettings = { x: 967, y: 594, scale: 0.8 };
 const initialLaptopSettings = { x: 967, y: 580, scale: 0.45 };
 const initialMobileSettings = { x: 867, y: 594, scale: 0.2 };
 
 function setInitialView() {
-  const isMobile = window.innerWidth <= 768; // Mobilnak tekintjük, ha a szélesség 768px vagy kisebb
+  const isMobile = window.innerWidth <= 768;
   const isLaptop = window.innerWidth > 768 && window.innerWidth < 1300;
 
   let settings;
@@ -78,14 +77,12 @@ function setInitialView() {
   translateX = rect.width / 2 - settings.x * scale;
   translateY = rect.height / 2 - settings.y * scale;
 
-  updateTransform(); // Frissítjük a térképet
-  updateMarkerPositions(); // Markerek pozíciójának frissítése
+  updateTransform();
+  updateMarkerPositions();
 }
 
-// Betöltéskor beállítjuk a kezdeti nézetet
 document.addEventListener("DOMContentLoaded", () => {
-  // Várjuk meg, hogy minden stílus alkalmazva legyen
-  setTimeout(setInitialView, 100); // Kis késleltetés a CSS betöltésére
+  setTimeout(setInitialView, 100);
   updateCounters();
   updateMarkers();
 });
@@ -96,7 +93,6 @@ let currentQuestionIndex = -1;
 let questionNumber = 1, errors = 0;
 let currentQuestion = "";
 
-// Koordináták keresése a legközelebbi markerhez
 function findNearestMarker(clickX, clickY) {
   let nearestMarker = null;
   let minDistance = Infinity;
@@ -124,12 +120,10 @@ function findNearestMarker(clickX, clickY) {
 }
 
 mapContainer.addEventListener("click", (e) => {
-  // Kattintási pozíció meghatározása
   const rect = mapContainer.getBoundingClientRect();
   const clickX = (e.clientX - rect.left - translateX) / scale;
   const clickY = (e.clientY - rect.top - translateY) / scale;
 
-  // Legközelebbi marker keresése
   const nearestMarker = findNearestMarker(clickX, clickY);
 
   if (nearestMarker) {
@@ -202,11 +196,10 @@ markerPositions.forEach(({ id, x, y }) => {
   marker.classList.add("marker-button");
   marker.style.left = `${x}px`;
   marker.style.top = `${y}px`;
-  marker.style.width = `${20 * scale}px`; // Marker méretének beállítása a zoom alapján
-  marker.style.height = `${20 * scale}px`; // Marker méretének beállítása a zoom alapján
+  marker.style.width = `${20 * scale}px`;
+  marker.style.height = `${20 * scale}px`;
   mapContainer.appendChild(marker);
 
-  // OnClick esemény hozzáadása
   marker.addEventListener("click", () => {
     const clickedId = marker.id;
     console.log(clickedId);
@@ -214,32 +207,30 @@ markerPositions.forEach(({ id, x, y }) => {
     const clickedMarker = document.getElementById(clickedId);
 
     function basicMarkerColor(){
-      clickedMarker.style.borderColor = "#4363d8"; //új kék
-      clickedMarker.style.backgroundColor = "#000075"; //új kék
+      clickedMarker.style.borderColor = "#4363d8";
+      clickedMarker.style.backgroundColor = "#000075";
     }
   });
 });
 
-let remainingQuestions = [...markerPositions];  // A kérdések másolata
+let remainingQuestions = [...markerPositions];
 
 function showHint(){
   const currentMarkerId = markerPositions[currentQuestionIndex].id;
   const currentMarker = document.getElementById(currentMarkerId);
-  currentMarker.style.backgroundColor = "#f032e6"; //magenta
-  currentMarker.style.borderColor = "#911eb4"; //magenta
+  currentMarker.style.backgroundColor = "#f032e6";
+  currentMarker.style.borderColor = "#911eb4";
 }
 
 // Következő kérdés kiválasztása
 function askNextQuestion() {
   if (filteredMarkers.length === 0) {
-    // Ha már nincs több kérdés, keverjük össze újra
-    filteredMarkers = [...markerPositions];  // Visszaállítjuk az eredeti kérdéseket
+    filteredMarkers = [...markerPositions];  
     updateMarkers();
-    shuffleArray(filteredMarkers);  // Keverjük össze
+    shuffleArray(filteredMarkers);  
     questionNumber = 1;
     errors = 0;
-    //ide kell
-    // Minden marker-button alapértelmezett stílusának visszaállítása
+
     const markers = document.querySelectorAll(".marker-button");
     markers.forEach((marker) => {
       marker.style.backgroundColor = "#000075";
@@ -250,29 +241,19 @@ function askNextQuestion() {
     alert("Refresh");
   }
 
-  // Válasszunk egy véletlenszerű kérdést a maradék kérdések közül
   const randomIndex = Math.floor(Math.random() * filteredMarkers.length);
-  currentQuestion = filteredMarkers.splice(randomIndex, 1)[0];  // Eltávolítjuk a választott kérdést
+  currentQuestion = filteredMarkers.splice(randomIndex, 1)[0]; 
   currentQuestionIndex = markerPositions.indexOf(currentQuestion);
   NavBarQuestion.textContent = currentQuestion.id.toUpperCase();
 }
 
-// Keverés függvény
 function shuffleArray(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];  // Elemek csere
+    [array[i], array[j]] = [array[j], array[i]]; 
   }
 }
 
-
-// 1-49-ig id="Border"
-// 50-88-ig id="TMA"
-// 89-115-ig id="Else"
-
-//Ide írd a szűrőket
-
-// Checkbox elemek
 const borderCheckbox = document.getElementById("Border");
 const tmaCheckbox = document.getElementById("TMA");
 const elseCheckbox = document.getElementById("Else");
@@ -288,7 +269,6 @@ function updateMarkers() {
   const elseChecked = elseCheckbox.checked;
 
   if (borderChecked || tmaChecked || elseChecked) {
-    // Üres lista az új szűrt pontok tárolására
     filteredMarkers = [];
 
     if (borderChecked) {
@@ -303,7 +283,6 @@ function updateMarkers() {
       filteredMarkers.push(...markerPositions.slice(88, 115));
     }
   } else {
-    // Ha egyik checkbox sincs pipálva, az összes pontot mutatja
     filteredMarkers = [...markerPositions];
   }
 
@@ -316,7 +295,6 @@ function updateMarkers() {
 }
 
 function refreshMarkers() {
-  // Töröljük az összes marker elemet a térképről
   document.querySelectorAll(".marker-button").forEach(marker => marker.remove());
 
   // Hozzáadjuk a szűrt pontokat a térképhez
@@ -326,11 +304,10 @@ function refreshMarkers() {
     marker.classList.add("marker-button");
     marker.style.left = `${x}px`;
     marker.style.top = `${y}px`;
-    marker.style.width = `${20 * scale}px`; // Marker méretének beállítása a zoom alapján
-    marker.style.height = `${20 * scale}px`; // Marker méretének beállítása a zoom alapján
+    marker.style.width = `${20 * scale}px`;
+    marker.style.height = `${20 * scale}px`;
     mapContainer.appendChild(marker);
 
-    // Marker kattintás kezelése
     marker.addEventListener("click", () => {
       const clickedId = marker.id;
       console.log(clickedId);
@@ -343,18 +320,9 @@ const checkboxes = document.querySelectorAll('input[type="checkbox"]'); // Felt�
 
 checkboxes.forEach((checkbox) => {
   checkbox.addEventListener('change', () => {
-    // Újraszűrjük a marker-eket
     updateMarkers();
-
-    // Ha az aktuális kérdés már nem szerepel a szűrt listában, új kérdést kérdezünk
-    /*if (!filteredMarkers.some(marker => marker.id === currentQuestion.id)) {
-      askNextQuestion();
-    }*/
   });
 });
-
-
-//Ide
 
 function updateCounters(){
   NavBarCounter.innerText = questionNumber + " / " + questionLength;
@@ -369,19 +337,16 @@ function updateMarkerPositions() {
     const scaledY = y * scale + translateY;
     marker.style.left = `${scaledX}px`;
     marker.style.top = `${scaledY}px`;
-    marker.style.width = `${12 * scale}px`; // Marker méretének frissítése
-    marker.style.height = `${12 * scale}px`; // Marker méretének frissítése
+    marker.style.width = `${12 * scale}px`;
+    marker.style.height = `${12 * scale}px`;
   });
 }
-
 
 // Térkép átalakításának frissítése
 function updateTransform() {
   map.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
   updateMarkerPositions();
 }
-
-//Koordináták szerzése
 
 let mouseX, mouseY;  // Az egér koordinátái
 let addNo = 1;
@@ -578,6 +543,5 @@ mapContainer.addEventListener("touchend", (e) => {
   }
 });
 
-// Indítás
 askNextQuestion();
 updateTransform();
