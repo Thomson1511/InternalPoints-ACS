@@ -92,6 +92,8 @@ let startX, startY;
 let currentQuestionIndex = -1;
 let questionNumber = 1, errors = 0;
 let currentQuestion = "";
+let lastMistakeMarker = "";
+let lastMistakeIndex = 0;
 
 function findNearestMarker(clickX, clickY) {
   let nearestMarker = null;
@@ -110,7 +112,7 @@ function findNearestMarker(clickX, clickY) {
     if (nearestMarker.id === currentQuestion.id) {
       return nearestMarker;
     }
-    if (!remainingQuestions.some((question) => question.id === nearestMarker.id)) {
+    if (!filteredMarkers.some((question) => question.id === nearestMarker.id)) {
       return null;
     }
     else{
@@ -143,6 +145,13 @@ mapContainer.addEventListener("click", (e) => {
           markerElement.style.backgroundColor = "#000075";
         }
       });
+      const mistakenMarkerId = markerPositions[lastMistakeIndex].id;
+      const mistakenMarkerElement = document.getElementById(mistakenMarkerId);
+
+      setTimeout(() => {
+        mistakenMarkerElement.style.borderColor = "#4363d8";
+        mistakenMarkerElement.style.backgroundColor = "#000075";
+      }, 800);      
 
       if (errorCounter === 0) {
         clickedMarker.style.borderColor = "#3cb44b";
@@ -154,8 +163,6 @@ mapContainer.addEventListener("click", (e) => {
         clickedMarker.style.backgroundColor = "#c20202";
         clickedMarker.style.borderColor = "#990000";
       }
-
-      console.log("jó")
       questionNumber += 1;
       errorCounter = 0;
       errorCounterList = [];
@@ -168,6 +175,7 @@ mapContainer.addEventListener("click", (e) => {
       if (!errorCounterList.includes(nearestMarker.id) && errorCounter < 2) {
         errors += 1;
         errorCounter += 1;
+        lastMistakeIndex = markerPositions.findIndex(marker => marker.id === nearestMarker.id);
         errorCounterList.push(nearestMarker.id);
         updateCounters();
 
@@ -296,7 +304,6 @@ function updateMarkers() {
 
 function refreshMarkers() {
   document.querySelectorAll(".marker-button").forEach(marker => marker.remove());
-
   // Hozzáadjuk a szűrt pontokat a térképhez
   filteredMarkers.forEach(({ id, x, y }) => {
     const marker = document.createElement("div");
@@ -310,13 +317,11 @@ function refreshMarkers() {
 
     marker.addEventListener("click", () => {
       const clickedId = marker.id;
-      console.log(clickedId);
     });
   });
 }
 
-// Checkbox változásának figyelése
-const checkboxes = document.querySelectorAll('input[type="checkbox"]'); // Feltételezve, hogy ezek a szűrő checkboxok
+const checkboxes = document.querySelectorAll('input[type="checkbox"]');
 
 checkboxes.forEach((checkbox) => {
   checkbox.addEventListener('change', () => {
@@ -348,7 +353,7 @@ function updateTransform() {
   updateMarkerPositions();
 }
 
-let mouseX, mouseY;  // Az egér koordinátái
+let mouseX, mouseY;
 let addNo = 1;
 
 // Egér mozgatás esemény
@@ -360,12 +365,12 @@ mapContainer.addEventListener("mousemove", (e) => {
 });
 
 // Koordináták másolása a vágólapra space lenyomására
+/*
 document.addEventListener("keydown", (e) => {
-  if (e.key === " ") {  // Ha a space billentyűt lenyomják
-    // Egérpozíció kerekítése
+  if (e.key === " ") {
     const roundedMouseX = Math.round(mouseX);
     const roundedMouseY = Math.round(mouseY);
-    const markerData = `{ id: "valami${addNo}", x: ${roundedMouseX}, y: ${roundedMouseY} },`;  // Formázott szöveg
+    const markerData = `{ id: "valami${addNo}", x: ${roundedMouseX}, y: ${roundedMouseY} },`;
     addNo += 1;
     navigator.clipboard.writeText(markerData).then(() => {
     }).catch(err => {
@@ -374,8 +379,7 @@ document.addEventListener("keydown", (e) => {
     });
   }
 });
-
-//Koordináták szerzésének vége
+*/
 
 // Egér mozgatás eseményei
 mapContainer.addEventListener("mousedown", (e) => {
