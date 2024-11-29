@@ -231,10 +231,10 @@ function showHint(){
 
 // Következő kérdés kiválasztása
 function askNextQuestion() {
-  if (remainingQuestions.length === 0) {
+  if (filteredMarkers.length === 0) {
     // Ha már nincs több kérdés, keverjük össze újra
-    remainingQuestions = [...markerPositions];  // Visszaállítjuk az eredeti kérdéseket
-    shuffleArray(remainingQuestions);  // Keverjük össze
+    filteredMarkers = [...markerPositions];  // Visszaállítjuk az eredeti kérdéseket
+    shuffleArray(filteredMarkers);  // Keverjük össze
     questionNumber = 1;
     errors = 0;
     //ide kell
@@ -250,8 +250,8 @@ function askNextQuestion() {
   }
 
   // Válasszunk egy véletlenszerű kérdést a maradék kérdések közül
-  const randomIndex = Math.floor(Math.random() * remainingQuestions.length);
-  currentQuestion = remainingQuestions.splice(randomIndex, 1)[0];  // Eltávolítjuk a választott kérdést
+  const randomIndex = Math.floor(Math.random() * filteredMarkers.length);
+  currentQuestion = filteredMarkers.splice(randomIndex, 1)[0];  // Eltávolítjuk a választott kérdést
   currentQuestionIndex = markerPositions.indexOf(currentQuestion);
   NavBarQuestion.textContent = currentQuestion.id.toUpperCase();
 }
