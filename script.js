@@ -276,6 +276,7 @@ function shuffleArray(array) {
 const borderCheckbox = document.getElementById("Border");
 const tmaCheckbox = document.getElementById("TMA");
 const elseCheckbox = document.getElementById("Else");
+let questionLength = 0;
 
 // Lista a megjelenítendő pontok ID-jainak tárolására
 let filteredMarkers = [...markerPositions]; 
@@ -289,31 +290,27 @@ function updateMarkers() {
   if (borderChecked || tmaChecked || elseChecked) {
     // Üres lista az új szűrt pontok tárolására
     filteredMarkers = [];
-    console.log("bent");
 
     if (borderChecked) {
-      filteredMarkers.push(...markerPositions.slice(0, 49)); 
-      console.log("borderChecked");
+      filteredMarkers.push(...markerPositions.slice(0, 49));
     }
 
     if (tmaChecked) {
       filteredMarkers.push(...markerPositions.slice(49, 88));
-      console.log("tmaChecked");
     }
 
     if (elseChecked) {
       filteredMarkers.push(...markerPositions.slice(88, 115));
-      console.log("elseChecked");
     }
   } else {
     // Ha egyik checkbox sincs pipálva, az összes pontot mutatja
     filteredMarkers = [...markerPositions];
-    console.log("else");
   }
 
   // Frissítsük a térkép megjelenített pontjait
   refreshMarkers();
   updateTransform();
+  questionLength = filteredMarkers.length;
   updateCounters();
 }
 
@@ -359,7 +356,7 @@ checkboxes.forEach((checkbox) => {
 //Ide
 
 function updateCounters(){
-  NavBarCounter.innerText = questionNumber + " / " + filteredMarkers.length;
+  NavBarCounter.innerText = questionNumber + " / " + questionLength;
   NavBarErrors.innerText = "Errors: " + errors;
 }
 
