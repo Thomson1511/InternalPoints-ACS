@@ -296,12 +296,12 @@ function updateMarkers() {
     }
 
     if (tmaChecked) {
-      filteredMarkers.push(...markerPositions.slice(50, 88));
+      filteredMarkers.push(...markerPositions.slice(49, 88));
       console.log("tmaChecked");
     }
 
     if (elseChecked) {
-      filteredMarkers.push(...markerPositions.slice(89, 115));
+      filteredMarkers.push(...markerPositions.slice(88, 115));
       console.log("elseChecked");
     }
   } else {
@@ -313,6 +313,7 @@ function updateMarkers() {
   // Frissítsük a térkép megjelenített pontjait
   refreshMarkers();
   updateTransform();
+  updateCounters();
 }
 
 function refreshMarkers() {
@@ -347,7 +348,7 @@ elseCheckbox.addEventListener("change", updateMarkers);
 //Ide
 
 function updateCounters(){
-  NavBarCounter.innerText = questionNumber + " / " + markerPositions.length;
+  NavBarCounter.innerText = questionNumber + " / " + filteredMarkers.length;
   NavBarErrors.innerText = "Errors: " + errors;
 }
 
