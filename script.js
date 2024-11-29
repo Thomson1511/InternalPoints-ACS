@@ -312,6 +312,7 @@ function updateMarkers() {
   updateTransform();
   questionLength = filteredMarkers.length;
   updateCounters();
+  askNextQuestion();
 }
 
 function refreshMarkers() {
@@ -346,9 +347,9 @@ checkboxes.forEach((checkbox) => {
     updateMarkers();
 
     // Ha az aktuális kérdés már nem szerepel a szűrt listában, új kérdést kérdezünk
-    if (!filteredMarkers.some(marker => marker.id === currentQuestion.id)) {
+    /*if (!filteredMarkers.some(marker => marker.id === currentQuestion.id)) {
       askNextQuestion();
-    }
+    }*/
   });
 });
 
