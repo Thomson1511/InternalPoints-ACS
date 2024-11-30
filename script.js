@@ -129,6 +129,31 @@ function findNearestMarker(clickX, clickY) {
   }
 }
 
+// Tooltip elem létrehozása
+const tooltip = document.createElement("div");
+tooltip.id = "marker-tooltip";
+tooltip.style.position = "absolute";
+tooltip.style.padding = "5px 10px";
+tooltip.style.backgroundColor = "#333";
+tooltip.style.color = "#fff";
+tooltip.style.borderRadius = "5px";
+tooltip.style.fontSize = "12px";
+tooltip.style.display = "none"; // Alapból rejtve
+tooltip.style.zIndex = "10";
+mapContainer.appendChild(tooltip);
+
+// Tooltip megjelenítése adott marker fölött
+function showTooltip(markerId, x, y) {
+  tooltip.textContent = markerId;
+  tooltip.style.left = `${x}px`;
+  tooltip.style.top = `${y - 30}px`; // A marker fölött jelenjen meg
+  tooltip.style.display = "block";
+
+  setTimeout(() => {
+    tooltip.style.display = "none"; // Egy idő után eltűnik
+  }, 2000);
+}
+
 mapContainer.addEventListener("click", (e) => {
   const rect = mapContainer.getBoundingClientRect();
   const clickX = (e.clientX - rect.left - translateX) / scale;
@@ -197,6 +222,16 @@ mapContainer.addEventListener("click", (e) => {
         lastMistakeIndex = markerPositions.findIndex(marker => marker.id === nearestMarker.id);
         errorCounterList.push(nearestMarker.id);
         updateCounters();
+
+        //tooltip megjelenítése
+
+        const clickedMarkerRect = clickedMarker.getBoundingClientRect();
+        const markerCenterX = clickedMarkerRect.left + clickedMarkerRect.width / 2;
+        const markerCenterY = clickedMarkerRect.top;
+
+        showTooltip(nearestMarker.id, markerCenterX, markerCenterY);
+
+        //vége
 
         clickedMarker.style.backgroundColor = "#c20202";
         clickedMarker.style.borderColor = "#990000";
