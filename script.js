@@ -100,7 +100,7 @@ let currentQuestionIndex = -1;
 let questionNumber = 1, errors = 0;
 let currentQuestion = "";
 let lastMistakeMarker = "";
-let lastMistakeIndex = 0;
+let lastMistakeIndex = 999;
 
 function findNearestMarker(clickX, clickY) {
   //logFunctionCall("findNearestMarker");
@@ -154,13 +154,26 @@ mapContainer.addEventListener("click", (e) => {
           markerElement.style.backgroundColor = "#000075";
         }
       });
-      const mistakenMarkerId = markerPositions[lastMistakeIndex].id;
-      const mistakenMarkerElement = document.getElementById(mistakenMarkerId);
+      
+      let mistakenMarkerElement = null;
 
-      setTimeout(() => {
-        mistakenMarkerElement.style.borderColor = "#4363d8";
-        mistakenMarkerElement.style.backgroundColor = "#000075";
-      }, 800);      
+      // Ha az index érvényes, csak akkor próbáljuk meg lekérni az elemet
+      if (lastMistakeIndex >= 0 && lastMistakeIndex < markerPositions.length) {
+        let mistakenMarkerId = markerPositions[lastMistakeIndex].id;
+        mistakenMarkerElement = document.getElementById(mistakenMarkerId);
+
+        if (mistakenMarkerElement) { // Ellenőrzés, hogy az elem létezik
+          setTimeout(() => {
+            console.log("Ez: ");
+            console.log(mistakenMarkerElement);
+            mistakenMarkerElement.style.borderColor = "#4363d8";
+            mistakenMarkerElement.style.backgroundColor = "#000075";
+            mistakenMarkerElement = null; // Referencia törlése
+            lastMistakeIndex = 999;
+            console.log(mistakenMarkerElement);
+          }, 800);
+        }
+      }  
 
       if (errorCounter === 0) {
         clickedMarker.style.borderColor = "#3cb44b";
@@ -259,6 +272,7 @@ function askNextQuestion() {
     
     updateCounters();
     alert("Refresh");
+    return;
   }
 
   const randomIndex = Math.floor(Math.random() * filteredMarkers.length);
@@ -574,3 +588,4 @@ mapContainer.addEventListener("touchend", (e) => {
     lastDistance = 0; // Reseteljük a távolságot
   }
 });
+
