@@ -353,15 +353,25 @@ function updateCounters(){
 // Pontok pozíciójának és méretének frissítése
 function updateMarkerPositions() {
   logFunctionCall("updateMarkerPositions");
-  filteredMarkers.forEach(({ id, x, y }) => {
+  markerPositions.forEach(({ id, x, y }) => {
     const marker = document.getElementById(id);
-    const scaledX = x * scale + translateX;
-    const scaledY = y * scale + translateY;
-    marker.style.left = `${scaledX}px`;
-    marker.style.top = `${scaledY}px`;
-    marker.style.width = `${12 * scale}px`;
-    marker.style.height = `${12 * scale}px`;
+    if (marker) {
+      marker.style.left = `${x * scale + translateX}px`;
+      marker.style.top = `${y * scale + translateY}px`;
+      marker.style.width = `${12 * scale}px`;
+      marker.style.height = `${12 * scale}px`;
+    }
   });
+  if (currentQuestion) {
+    const currentMarker = document.getElementById(currentQuestion.id);
+    if (currentMarker) {
+      const { x, y } = currentQuestion;
+      currentMarker.style.left = `${x * scale + translateX}px`;
+      currentMarker.style.top = `${y * scale + translateY}px`;
+      currentMarker.style.width = `${12 * scale}px`;
+      currentMarker.style.height = `${12 * scale}px`;
+    }
+  }
 }
 
 // Térkép átalakításának frissítése
