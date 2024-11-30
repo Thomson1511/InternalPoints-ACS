@@ -86,9 +86,12 @@ function setInitialView() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  setTimeout(setInitialView, 100);
-  updateCounters();
-  updateMarkers();
+  setTimeout(() => {
+    setInitialView();
+    updateMarkers();
+    updateCounters();
+    askNextQuestion();
+}, 100);
 });
 
 let isPanning = false;
