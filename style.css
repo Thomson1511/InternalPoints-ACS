@@ -145,6 +145,8 @@ body {
     display: none;
   }
   #selector{
+    width: 100px;
+    height: 100px;
     padding: 4px;
   }
 }
