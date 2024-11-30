@@ -164,13 +164,10 @@ mapContainer.addEventListener("click", (e) => {
 
         if (mistakenMarkerElement) { // Ellenőrzés, hogy az elem létezik
           setTimeout(() => {
-            console.log("Ez: ");
-            console.log(mistakenMarkerElement);
             mistakenMarkerElement.style.borderColor = "#4363d8";
             mistakenMarkerElement.style.backgroundColor = "#000075";
             mistakenMarkerElement = null; // Referencia törlése
             lastMistakeIndex = 999;
-            console.log(mistakenMarkerElement);
           }, 800);
         }
       }  
@@ -232,7 +229,6 @@ markerPositions.forEach(({ id, x, y }) => {
 
   marker.addEventListener("click", () => {
     const clickedId = marker.id;
-    console.log(clickedId);
     const correctId = markerPositions[currentQuestionIndex].id;
     const clickedMarker = document.getElementById(clickedId);
 
