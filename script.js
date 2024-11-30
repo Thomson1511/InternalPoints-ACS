@@ -58,7 +58,7 @@ const initialLaptopSettings = { x: 967, y: 580, scale: 0.45 };
 const initialMobileSettings = { x: 867, y: 594, scale: 0.2 };
 
 function setInitialView() {
-  logFunctionCall("setInitialView");
+  //logFunctionCall("setInitialView");
   const isMobile = window.innerWidth <= 768;
   const isLaptop = window.innerWidth > 768 && window.innerWidth < 1300;
 
@@ -103,7 +103,7 @@ let lastMistakeMarker = "";
 let lastMistakeIndex = 0;
 
 function findNearestMarker(clickX, clickY) {
-  logFunctionCall("findNearestMarker");
+  //logFunctionCall("findNearestMarker");
   let nearestMarker = null;
   let minDistance = Infinity;
   const threshold = 15;
@@ -141,7 +141,7 @@ mapContainer.addEventListener("click", (e) => {
     const correctId = markerPositions[currentQuestionIndex].id;
 
     function basicMarkerColor() {
-      logFunctionCall("basicMarkerColor");
+      //logFunctionCall("basicMarkerColor");
       clickedMarker.style.borderColor = "#4363d8"; 
       clickedMarker.style.backgroundColor = "#000075";
     }
@@ -224,7 +224,7 @@ markerPositions.forEach(({ id, x, y }) => {
     const clickedMarker = document.getElementById(clickedId);
 
     function basicMarkerColor(){
-      logFunctionCall("basicMarkerColor");
+      //logFunctionCall("basicMarkerColor");
       clickedMarker.style.borderColor = "#4363d8";
       clickedMarker.style.backgroundColor = "#000075";
     }
@@ -234,7 +234,7 @@ markerPositions.forEach(({ id, x, y }) => {
 let remainingQuestions = [...markerPositions];
 
 function showHint(){
-  logFunctionCall("showHint");
+  //logFunctionCall("showHint");
   const currentMarkerId = markerPositions[currentQuestionIndex].id;
   const currentMarker = document.getElementById(currentMarkerId);
   currentMarker.style.backgroundColor = "#f032e6";
@@ -243,7 +243,7 @@ function showHint(){
 
 // Következő kérdés kiválasztása
 function askNextQuestion() {
-  logFunctionCall("askNextQuestion");
+  //logFunctionCall("askNextQuestion");
   if (filteredMarkers.length === 0) {
     filteredMarkers = [...markerPositions];  
     updateMarkers();
@@ -268,7 +268,7 @@ function askNextQuestion() {
 }
 
 function shuffleArray(array) {
-  logFunctionCall("shuffleArray");
+  //logFunctionCall("shuffleArray");
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]]; 
@@ -284,7 +284,7 @@ let questionLength = 0;
 let filteredMarkers = [...markerPositions]; 
 
 function updateMarkers() {
-  logFunctionCall("updateMarkers");
+  //logFunctionCall("updateMarkers");
 
   const borderChecked = borderCheckbox.checked;
   const tmaChecked = tmaCheckbox.checked;
@@ -317,7 +317,7 @@ function updateMarkers() {
 }
 
 function refreshMarkers() {
-  logFunctionCall("refreshMarkers");
+  //logFunctionCall("refreshMarkers");
   document.querySelectorAll(".marker-button").forEach(marker => marker.remove());
   // Hozzáadjuk a szűrt pontokat a térképhez
   filteredMarkers.forEach(({ id, x, y }) => {
@@ -345,14 +345,14 @@ checkboxes.forEach((checkbox) => {
 });
 
 function updateCounters(){
-  logFunctionCall("updateCounters");
+  //logFunctionCall("updateCounters");
   NavBarCounter.innerText = questionNumber + " / " + questionLength;
   NavBarErrors.innerText = "Errors: " + errors;
 }
 
 // Pontok pozíciójának és méretének frissítése
 function updateMarkerPositions() {
-  logFunctionCall("updateMarkerPositions");
+  //logFunctionCall("updateMarkerPositions");
   markerPositions.forEach(({ id, x, y }) => {
     const marker = document.getElementById(id);
     if (marker) {
@@ -376,7 +376,7 @@ function updateMarkerPositions() {
 
 // Térkép átalakításának frissítése
 function updateTransform() {
-  logFunctionCall("updateTransform");
+  //logFunctionCall("updateTransform");
   map.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
   updateMarkerPositions();
 }
